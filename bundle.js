@@ -23,27 +23,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ App)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _event_EventHandler_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./event/EventHandler.js */ "./src/js/event/EventHandler.js");
 
 
 
 
-var App = /*#__PURE__*/function () {
-  function App() {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, App);
-  }
+var App = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(function App() {
+  (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, App);
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(App, [{
-    key: "init",
-    value: function init() {
-      this.EventHandler = new _event_EventHandler_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
-    }
-  }]);
-
-  return App;
-}();
+  new _event_EventHandler_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
+});
 
 
 
@@ -67,9 +58,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _view_MainView_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../view/MainView.js */ "./src/js/view/MainView.js");
 /* harmony import */ var _view_ModalView_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../view/ModalView.js */ "./src/js/view/ModalView.js");
-/* harmony import */ var _managers_APIManager_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../managers/APIManager.js */ "./src/js/managers/APIManager.js");
-/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/validator.js */ "./src/js/utils/validator.js");
-/* harmony import */ var _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../managers/storageManager.js */ "./src/js/managers/storageManager.js");
+/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/validator.js */ "./src/js/utils/validator.js");
+/* harmony import */ var _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../managers/storageManager.js */ "./src/js/managers/storageManager.js");
+/* harmony import */ var _managers_videoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../managers/videoAPICaller.js */ "./src/js/managers/videoAPICaller.js");
 
 
 
@@ -92,147 +83,111 @@ var EventHandler = /*#__PURE__*/function () {
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(EventHandler, [{
     key: "setBindEvents",
     value: function setBindEvents() {
-      this.mainView.bindModalOpenButton(this.clickModalOpenButton.bind(this));
-      this.modalView.bindOnClickSearchButton(this.clickSearchButton.bind(this));
-      this.modalView.bindOnClickDimmer(this.clickDimmer.bind(this));
-      this.modalView.bindVideoListScroll(this.videoListScroll.bind(this));
-      this.modalView.bindVideoListClickStoreButton(this.clickStoreButton.bind(this));
+      this.mainView.bindModalOpenButton(this.onModalOpenButtonClick.bind(this));
+      this.modalView.bindOnClickSearchButton(this.onSearchButtonClick.bind(this));
+      this.modalView.bindOnClickDimmer(this.onDimmerClick.bind(this));
+      this.modalView.bindVideoListScroll(this.onvideoListScroll.bind(this));
+      this.modalView.bindVideoListClickStoreButton(this.onStoreButtonClick.bind(this));
     }
   }, {
-    key: "clickModalOpenButton",
-    value: function clickModalOpenButton() {
+    key: "onModalOpenButtonClick",
+    value: function onModalOpenButtonClick() {
       this.modalView.showModal();
     }
   }, {
-    key: "clickDimmer",
-    value: function clickDimmer() {
+    key: "onDimmerClick",
+    value: function onDimmerClick() {
       this.modalView.hideModal();
     }
   }, {
-    key: "clickStoreButton",
-    value: function clickStoreButton(videoId) {
-      _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_8__["default"].storeVideoId(videoId);
+    key: "onStoreButtonClick",
+    value: function onStoreButtonClick(videoId) {
+      try {
+        _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_7__["default"].storeVideoId(videoId);
+      } catch (error) {
+        alert(error.message);
+      }
     }
   }, {
-    key: "clickSearchButton",
+    key: "onSearchButtonClick",
     value: function () {
-      var _clickSearchButton = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee(searchInput) {
+      var _onSearchButtonClick = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee(inputValue) {
         var videoListData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                _utils_validator_js__WEBPACK_IMPORTED_MODULE_7__["default"].isValidSearchInput(searchInput);
+                _utils_validator_js__WEBPACK_IMPORTED_MODULE_6__["default"].isValidSearchInput(inputValue);
                 this.modalView.resetVideoList();
-                this.modalView.appendEmptyList();
-                this.modalView.appendVideoItem();
-                this.modalView.getSkeletonTemplate();
-                _context.next = 8;
-                return this.getVideoListData(searchInput);
+                this.modalView.showLoadingVideoItems();
+                _context.next = 6;
+                return _managers_videoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getVideoListData(inputValue);
 
-              case 8:
+              case 6:
                 videoListData = _context.sent;
-                this.modalView.getData(videoListData);
-                _context.next = 16;
+                this.modalView.updateVideoItems(videoListData);
+                _context.next = 14;
                 break;
 
-              case 12:
-                _context.prev = 12;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](0);
-                alert(_context.t0.message);
                 this.modalView.showNoResult();
+                alert(_context.t0.message);
 
-              case 16:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 12]]);
+        }, _callee, this, [[0, 10]]);
       }));
 
-      function clickSearchButton(_x) {
-        return _clickSearchButton.apply(this, arguments);
+      function onSearchButtonClick(_x) {
+        return _onSearchButtonClick.apply(this, arguments);
       }
 
-      return clickSearchButton;
+      return onSearchButtonClick;
     }()
   }, {
-    key: "videoListScroll",
+    key: "onvideoListScroll",
     value: function () {
-      var _videoListScroll = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee2(searchInput) {
+      var _onvideoListScroll = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee2(inputValue) {
         var videoListData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                this.modalView.appendEmptyList();
-                this.modalView.appendVideoItem();
-                this.modalView.getSkeletonTemplate();
-                _context2.next = 6;
-                return this.getVideoListData(searchInput);
+                this.modalView.showLoadingVideoItems();
+                _context2.next = 4;
+                return _managers_videoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getVideoListData(inputValue);
 
-              case 6:
+              case 4:
                 videoListData = _context2.sent;
-                this.modalView.getData(videoListData);
-                _context2.next = 13;
+                this.modalView.updateVideoItems(videoListData);
+                _context2.next = 11;
                 break;
 
-              case 10:
-                _context2.prev = 10;
+              case 8:
+                _context2.prev = 8;
                 _context2.t0 = _context2["catch"](0);
                 alert(_context2.t0.message);
 
-              case 13:
+              case 11:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 10]]);
+        }, _callee2, this, [[0, 8]]);
       }));
 
-      function videoListScroll(_x2) {
-        return _videoListScroll.apply(this, arguments);
+      function onvideoListScroll(_x2) {
+        return _onvideoListScroll.apply(this, arguments);
       }
 
-      return videoListScroll;
-    }()
-  }, {
-    key: "getVideoListData",
-    value: function () {
-      var _getVideoListData = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee3(searchInput) {
-        var rawData;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.prev = 0;
-                _context3.next = 3;
-                return _managers_APIManager_js__WEBPACK_IMPORTED_MODULE_6__["default"].fetchData(searchInput);
-
-              case 3:
-                rawData = _context3.sent;
-                return _context3.abrupt("return", _managers_APIManager_js__WEBPACK_IMPORTED_MODULE_6__["default"].parsingVideoData(rawData));
-
-              case 7:
-                _context3.prev = 7;
-                _context3.t0 = _context3["catch"](0);
-                throw new Error(_context3.t0);
-
-              case 10:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, null, [[0, 7]]);
-      }));
-
-      function getVideoListData(_x3) {
-        return _getVideoListData.apply(this, arguments);
-      }
-
-      return getVideoListData;
+      return onvideoListScroll;
     }()
   }]);
 
@@ -262,14 +217,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var APIManager = {
-  baseURL: 'https://vigorous-boyd-74648a.netlify.app/youtube/v3/search',
-  pageToken: '',
-  part: 'snippet',
-  maxResults: _utils_constants_js__WEBPACK_IMPORTED_MODULE_2__.VIDEO_LIST.RENDER_SIZE,
-  type: 'video',
-  regionCode: 'KR',
-  fetchData: function () {
-    var _fetchData = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee(inputValue) {
+  fetchData: function fetchData(requestURL) {
+    return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
       var response, responseData;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
         while (1) {
@@ -277,7 +226,7 @@ var APIManager = {
             case 0:
               _context.prev = 0;
               _context.next = 3;
-              return fetch("".concat(this.baseURL, "?part=").concat(this.part, "&q=").concat(inputValue, "&pageToken=").concat(this.pageToken, "&maxResults=").concat(this.maxResults, "&type=").concat(this.type, "&regionCode=").concat(this.regionCode));
+              return fetch(requestURL);
 
             case 3:
               response = _context.sent;
@@ -307,38 +256,11 @@ var APIManager = {
               return _context.stop();
           }
         }
-      }, _callee, this, [[0, 12]]);
-    }));
-
-    function fetchData(_x) {
-      return _fetchData.apply(this, arguments);
-    }
-
-    return fetchData;
-  }(),
-  checkResponseError: function checkResponseError(responseData) {
-    if (responseData.error) {
-      throw new Error(_utils_constants_js__WEBPACK_IMPORTED_MODULE_2__.ERROR_MESSAGE.CANNOT_LOAD);
-    }
-
-    return false;
+      }, _callee, null, [[0, 12]]);
+    }))();
   },
-  parsingVideoData: function parsingVideoData(responseData) {
-    try {
-      this.checkResponseError(responseData);
-      this.pageToken = responseData.nextPageToken;
-      return responseData.items.map(function (item) {
-        return {
-          videoId: item.id.videoId,
-          publishedAt: item.snippet.publishedAt,
-          title: item.snippet.title,
-          url: item.snippet.thumbnails.medium.url,
-          channelTitle: item.snippet.channelTitle
-        };
-      });
-    } catch (error) {
-      throw new Error(error);
-    }
+  createQueryString: function createQueryString(endPoint, params) {
+    return endPoint + '?' + new URLSearchParams(params).toString();
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (APIManager);
@@ -356,34 +278,117 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
+/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/validator.js */ "./src/js/utils/validator.js");
+
 
 var storageManager = {
   keys: {
-    videoId: 'videoId'
+    videoIdList: 'videoId'
   },
   storeVideoId: function storeVideoId(videoId) {
-    if (!this.hasVideoID(videoId)) {
-      var videoList = this.getVideoIdList();
-      videoList.push(videoId);
-      localStorage.setItem(this.keys.videoId, JSON.stringify(videoList));
+    try {
+      var videoIdList = this.getVideoIdList();
+      _utils_validator_js__WEBPACK_IMPORTED_MODULE_1__["default"].checkOverVideoIdListMaxLength(videoIdList);
+      var videoIdSet = new Set(videoIdList).add(videoId);
+      localStorage.setItem(this.keys.videoIdList, JSON.stringify((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(videoIdSet)));
+    } catch (error) {
+      throw error;
     }
   },
   getVideoIdList: function getVideoIdList() {
-    var videoList = JSON.parse(localStorage.getItem(this.keys.videoId));
-    return videoList || [];
+    var videoIdList = JSON.parse(localStorage.getItem(this.keys.videoIdList));
+    return videoIdList || [];
   },
   hasVideoID: function hasVideoID(videoId) {
-    var videoList = this.getVideoIdList();
-    return videoList ? videoList.includes(videoId) : false;
-  },
-  checkOverMaxLength: function checkOverMaxLength() {
-    if (this.getVideoIdList().length >= _utils_constants_js__WEBPACK_IMPORTED_MODULE_0__.STORE.MAX_LENGTH) {
-      throw new Error(_utils_constants_js__WEBPACK_IMPORTED_MODULE_0__.ERROR_MESSAGE.OVER_MAX_STORE_LENGTH);
-    }
+    var videoIdList = this.getVideoIdList();
+    return videoIdList && videoIdList.includes(videoId);
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (storageManager);
+
+/***/ }),
+
+/***/ "./src/js/managers/videoAPICaller.js":
+/*!*******************************************!*\
+  !*** ./src/js/managers/videoAPICaller.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
+/* harmony import */ var _APIManager_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./APIManager.js */ "./src/js/managers/APIManager.js");
+
+
+
+
+var videoAPICaller = {
+  endPoint: 'https://vigorous-boyd-74648a.netlify.app/youtube/v3/search',
+  queryItems: {
+    part: 'snippet',
+    q: '',
+    pageToken: '',
+    maxResults: _utils_constants_js__WEBPACK_IMPORTED_MODULE_2__.VIDEO_LIST.RENDER_SIZE,
+    type: 'video',
+    regionCode: 'KR'
+  },
+  getVideoListData: function getVideoListData(inputValue) {
+    var _this = this;
+
+    return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
+      var requestURL, rawData;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              _this.queryItems.q = inputValue;
+              requestURL = _APIManager_js__WEBPACK_IMPORTED_MODULE_3__["default"].createQueryString(_this.endPoint, _this.queryItems);
+              _context.next = 5;
+              return _APIManager_js__WEBPACK_IMPORTED_MODULE_3__["default"].fetchData(requestURL);
+
+            case 5:
+              rawData = _context.sent;
+              return _context.abrupt("return", _this.parsingVideoData(rawData));
+
+            case 9:
+              _context.prev = 9;
+              _context.t0 = _context["catch"](0);
+              throw _context.t0;
+
+            case 12:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 9]]);
+    }))();
+  },
+  parsingVideoData: function parsingVideoData(responseData) {
+    try {
+      this.queryItems.pageToken = responseData.nextPageToken;
+      return responseData.items.map(function (item) {
+        return {
+          videoId: item.id.videoId,
+          publishedAt: item.snippet.publishedAt,
+          title: item.snippet.title,
+          url: item.snippet.thumbnails.medium.url,
+          channelTitle: item.snippet.channelTitle
+        };
+      });
+    } catch (error) {
+      throw new Error(_utils_constants_js__WEBPACK_IMPORTED_MODULE_2__.ERROR_MESSAGE.DATA_PROCESSING_ERROR);
+    }
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (videoAPICaller);
 
 /***/ }),
 
@@ -396,11 +401,23 @@ var storageManager = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "$": () => (/* binding */ $)
+/* harmony export */   "$": () => (/* binding */ $),
+/* harmony export */   "throttle": () => (/* binding */ throttle)
 /* harmony export */ });
 var $ = function $(selector) {
   return document.querySelector(selector);
 };
+var throttle = function () {
+  var throttle = null;
+  return function (callback) {
+    if (!throttle) {
+      throttle = setTimeout(function () {
+        throttle = null;
+        callback();
+      }, 1000);
+    }
+  };
+}();
 
 /***/ }),
 
@@ -431,13 +448,13 @@ var DOM_STRING = {
   VIDEO_ITEM_SAVE_BUTTON: 'video-item__save-button'
 };
 var ERROR_MESSAGE = {
-  CANNOT_LOAD: '링크를 불러오지 못했습니다.',
+  DATA_PROCESSING_ERROR: '데이터 처리 중 오류가 발생했습니다.',
   SEARCH_ERROR: '검색 중 오류가 발생했습니다.',
   OVER_MAX_STORE_LENGTH: '최대 100개까지만 저장 가능합니다.',
   EMPTY_INPUT: '입력된 글자가 없습니다. 한 글자 이상의 검색어를 입력해주세요.'
 };
 var STORE = {
-  MAX_LENGTH: 100
+  VIDEO_ID_LIST_MAX_LENGTH: 100
 };
 var VIDEO_LIST = {
   RENDER_SIZE: 10
@@ -463,11 +480,20 @@ var validator = {
     if (isEmptyInput(searchInput)) {
       throw new Error(_constants_js__WEBPACK_IMPORTED_MODULE_0__.ERROR_MESSAGE.EMPTY_INPUT);
     }
+  },
+  checkOverVideoIdListMaxLength: function checkOverVideoIdListMaxLength(videoIdList) {
+    if (isOverVideoIdListMaxLength(videoIdList)) {
+      throw new Error(_constants_js__WEBPACK_IMPORTED_MODULE_0__.ERROR_MESSAGE.OVER_MAX_STORE_LENGTH);
+    }
   }
 };
 
 function isEmptyInput(searchInput) {
   return searchInput.trim() === '';
+}
+
+function isOverVideoIdListMaxLength(videoIdList) {
+  return videoIdList.length >= _constants_js__WEBPACK_IMPORTED_MODULE_0__.STORE.VIDEO_ID_LIST_MAX_LENGTH;
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validator);
@@ -532,56 +558,68 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ ModalView)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _VideoItemView_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./VideoItemView.js */ "./src/js/view/VideoItemView.js");
-/* harmony import */ var _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../managers/storageManager.js */ "./src/js/managers/storageManager.js");
-/* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
-/* harmony import */ var _utils_common_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/common.js */ "./src/js/utils/common.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _VideoItemView_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./VideoItemView.js */ "./src/js/view/VideoItemView.js");
+/* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
+/* harmony import */ var _utils_common_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/common.js */ "./src/js/utils/common.js");
+
+
+
+
+function _classPrivateMethodInitSpec(obj, privateSet) { _checkPrivateRedeclaration(obj, privateSet); privateSet.add(obj); }
+
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+
+function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
 
 
 
 
 
+var _appendEmptyList = /*#__PURE__*/new WeakSet();
 
+var _appendVideoItem = /*#__PURE__*/new WeakSet();
 
-
-
+var _showSkeletonTemplate = /*#__PURE__*/new WeakSet();
 
 var ModalView = /*#__PURE__*/function () {
   function ModalView() {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, ModalView);
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, ModalView);
+
+    _classPrivateMethodInitSpec(this, _showSkeletonTemplate);
+
+    _classPrivateMethodInitSpec(this, _appendVideoItem);
+
+    _classPrivateMethodInitSpec(this, _appendEmptyList);
 
     this.registerDOM();
     this.videoItemList = [];
     this.throttle = null;
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(ModalView, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(ModalView, [{
     key: "registerDOM",
     value: function registerDOM() {
-      this.$modalContainer = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_8__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.MODAL_CONTAINER);
-      this.$dimmer = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_8__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.DIMMER);
-      this.$videoList = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_8__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.VIDEO_LIST);
-      this.$searchButton = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_8__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.SEARCH_BUTTOM);
-      this.$searchInput = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_8__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.SEARCH_INPUT);
-      this.$searchNoResult = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_8__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.SEARCH_NO_RESULT);
+      this.$modalContainer = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.MODAL_CONTAINER);
+      this.$dimmer = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.DIMMER);
+      this.$videoList = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.VIDEO_LIST);
+      this.$searchButton = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.SEARCH_BUTTOM);
+      this.$searchInput = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.SEARCH_INPUT);
+      this.$searchNoResult = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.SEARCH_NO_RESULT);
     }
   }, {
     key: "showModal",
     value: function showModal() {
-      this.$modalContainer.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.HIDE);
-      this.$searchNoResult.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.HIDE);
+      this.$modalContainer.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+      this.$searchNoResult.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
       this.$searchInput.value = '';
       this.$searchInput.focus();
     }
   }, {
     key: "hideModal",
     value: function hideModal() {
-      this.$modalContainer.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.HIDE);
+      this.$modalContainer.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
     }
   }, {
     key: "bindOnClickDimmer",
@@ -608,94 +646,75 @@ var ModalView = /*#__PURE__*/function () {
       var _this2 = this;
 
       this.$videoList.addEventListener('scroll', function () {
-        if (!_this2.throttle) {
-          _this2.throttle = setTimeout( /*#__PURE__*/(0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_4___default().mark(function _callee() {
-            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_4___default().wrap(function _callee$(_context) {
-              while (1) {
-                switch (_context.prev = _context.next) {
-                  case 0:
-                    _this2.throttle = null;
-
-                    if (_this2.$videoList.scrollHeight - _this2.$videoList.scrollTop <= _this2.$videoList.offsetHeight) {
-                      callback(_this2.$searchInput.value);
-                    }
-
-                  case 2:
-                  case "end":
-                    return _context.stop();
-                }
-              }
-            }, _callee);
-          })), 1000);
-        }
+        (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.throttle)(function () {
+          if (_this2.$videoList.scrollHeight - _this2.$videoList.scrollTop <= _this2.$videoList.offsetHeight) {
+            callback(_this2.$searchInput.value);
+          }
+        });
       });
     }
   }, {
     key: "bindVideoListClickStoreButton",
     value: function bindVideoListClickStoreButton(callback) {
       this.$videoList.addEventListener('click', function (event) {
-        try {
-          if ((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target.classList).includes(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.VIDEO_ITEM_SAVE_BUTTON)) {
-            _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_6__["default"].checkOverMaxLength();
-            event.target.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.HIDE);
-            callback(event.target.dataset.videoid);
-          }
-        } catch (error) {
-          alert(error.message);
+        if ((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target.classList).includes(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.VIDEO_ITEM_SAVE_BUTTON)) {
+          event.target.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+          callback(event.target.dataset.videoid);
         }
       });
     }
   }, {
     key: "resetVideoList",
     value: function resetVideoList() {
-      this.$searchNoResult.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.HIDE);
-      this.$videoList.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.HIDE);
+      this.$searchNoResult.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+      this.$videoList.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
       this.$videoList.textContent = '';
       this.videoItemList = [];
     }
   }, {
-    key: "appendEmptyList",
-    value: function appendEmptyList() {
-      this.$videoList.insertAdjacentHTML('beforeend', '<li></li>'.repeat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.VIDEO_LIST.RENDER_SIZE));
-    }
-  }, {
-    key: "appendVideoItem",
-    value: function appendVideoItem() {
-      var _this3 = this;
-
-      (0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(this.$videoList.childNodes).slice(-_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.VIDEO_LIST.RENDER_SIZE).forEach(function (li) {
-        _this3.videoItemList.push(new _VideoItemView_js__WEBPACK_IMPORTED_MODULE_5__["default"](li));
-      });
-    }
-  }, {
-    key: "getSkeletonTemplate",
-    value: function getSkeletonTemplate() {
-      this.videoItemList.slice(-_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.VIDEO_LIST.RENDER_SIZE).forEach(function (videoItem) {
-        return videoItem.getVideoItemTemplate();
-      });
-    }
-  }, {
-    key: "getData",
-    value: function getData(parsedData) {
-      this.updateVideoItems(parsedData);
+    key: "showNoResult",
+    value: function showNoResult() {
+      this.$searchNoResult.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+      this.$videoList.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
     }
   }, {
     key: "updateVideoItems",
     value: function updateVideoItems(data) {
-      this.videoItemList.slice(-_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.VIDEO_LIST.RENDER_SIZE).forEach(function (videoItem, index) {
+      this.videoItemList.slice(-_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.VIDEO_LIST.RENDER_SIZE).forEach(function (videoItem, index) {
         return videoItem.getVideoItemTemplate(data[index]);
       });
     }
   }, {
-    key: "showNoResult",
-    value: function showNoResult() {
-      this.$searchNoResult.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.HIDE);
-      this.$videoList.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.HIDE);
+    key: "showLoadingVideoItems",
+    value: function showLoadingVideoItems() {
+      _classPrivateMethodGet(this, _appendEmptyList, _appendEmptyList2).call(this);
+
+      _classPrivateMethodGet(this, _appendVideoItem, _appendVideoItem2).call(this);
+
+      _classPrivateMethodGet(this, _showSkeletonTemplate, _showSkeletonTemplate2).call(this);
     }
   }]);
 
   return ModalView;
 }();
+
+function _appendEmptyList2() {
+  this.$videoList.insertAdjacentHTML('beforeend', '<li></li>'.repeat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.VIDEO_LIST.RENDER_SIZE));
+}
+
+function _appendVideoItem2() {
+  var _this3 = this;
+
+  (0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(this.$videoList.childNodes).slice(-_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.VIDEO_LIST.RENDER_SIZE).forEach(function (li) {
+    _this3.videoItemList.push(new _VideoItemView_js__WEBPACK_IMPORTED_MODULE_3__["default"](li));
+  });
+}
+
+function _showSkeletonTemplate2() {
+  this.videoItemList.slice(-_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.VIDEO_LIST.RENDER_SIZE).forEach(function (videoItem) {
+    return videoItem.getVideoItemTemplate();
+  });
+}
 
 
 
@@ -2525,7 +2544,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-new _app_js__WEBPACK_IMPORTED_MODULE_3__["default"]().init();
+new _app_js__WEBPACK_IMPORTED_MODULE_3__["default"]();
 })();
 
 /******/ })()
