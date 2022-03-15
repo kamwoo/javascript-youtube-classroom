@@ -86,7 +86,7 @@ var EventHandler = /*#__PURE__*/function () {
       this.mainView.bindModalOpenButton(this.onModalOpenButtonClick.bind(this));
       this.modalView.bindOnClickSearchButton(this.onSearchButtonClick.bind(this));
       this.modalView.bindOnClickDimmer(this.onDimmerClick.bind(this));
-      this.modalView.bindVideoListScroll(this.onvideoListScroll.bind(this));
+      this.modalView.bindVideoListScroll(this.onVideoListScroll.bind(this));
       this.modalView.bindVideoListClickStoreButton(this.onStoreButtonClick.bind(this));
     }
   }, {
@@ -118,7 +118,7 @@ var EventHandler = /*#__PURE__*/function () {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                _utils_validator_js__WEBPACK_IMPORTED_MODULE_6__["default"].isValidSearchInput(inputValue);
+                _utils_validator_js__WEBPACK_IMPORTED_MODULE_6__["default"].checkSearchInput(inputValue);
                 this.modalView.resetVideoList();
                 this.modalView.showLoadingVideoItems();
                 _context.next = 6;
@@ -152,9 +152,9 @@ var EventHandler = /*#__PURE__*/function () {
       return onSearchButtonClick;
     }()
   }, {
-    key: "onvideoListScroll",
+    key: "onVideoListScroll",
     value: function () {
-      var _onvideoListScroll = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee2(inputValue) {
+      var _onVideoListScroll = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee2(inputValue) {
         var videoListData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee2$(_context2) {
           while (1) {
@@ -185,11 +185,11 @@ var EventHandler = /*#__PURE__*/function () {
         }, _callee2, this, [[0, 9]]);
       }));
 
-      function onvideoListScroll(_x2) {
-        return _onvideoListScroll.apply(this, arguments);
+      function onVideoListScroll(_x2) {
+        return _onVideoListScroll.apply(this, arguments);
       }
 
-      return onvideoListScroll;
+      return onVideoListScroll;
     }()
   }]);
 
@@ -285,21 +285,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var storageManager = {
-  keys: {
-    videoIdList: 'videoId'
+  KEY: {
+    VIDEO_ID_LIST: 'videoId'
   },
   storeVideoId: function storeVideoId(videoId) {
     try {
       var videoIdList = this.getVideoIdList();
       _utils_validator_js__WEBPACK_IMPORTED_MODULE_1__["default"].checkOverVideoIdListMaxLength(videoIdList);
       var videoIdSet = new Set(videoIdList).add(videoId);
-      localStorage.setItem(this.keys.videoIdList, JSON.stringify((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(videoIdSet)));
+      localStorage.setItem(this.KEY.VIDEO_ID_LIST, JSON.stringify((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(videoIdSet)));
     } catch (error) {
       throw error;
     }
   },
   getVideoIdList: function getVideoIdList() {
-    var videoIdList = JSON.parse(localStorage.getItem(this.keys.videoIdList));
+    var videoIdList = JSON.parse(localStorage.getItem(this.KEY.VIDEO_ID_LIST));
     return videoIdList || [];
   },
   hasVideoID: function hasVideoID(videoId) {
@@ -421,7 +421,7 @@ var throttle = function () {
       throttle = setTimeout(function () {
         throttle = null;
         callback();
-      }, 1000);
+      }, 200);
     }
   };
 }();
@@ -437,8 +437,11 @@ var throttle = function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CLASS_NAME_STRING": () => (/* binding */ CLASS_NAME_STRING),
 /* harmony export */   "DOM_STRING": () => (/* binding */ DOM_STRING),
 /* harmony export */   "ERROR_MESSAGE": () => (/* binding */ ERROR_MESSAGE),
+/* harmony export */   "KEY_CODE": () => (/* binding */ KEY_CODE),
+/* harmony export */   "SCROLL": () => (/* binding */ SCROLL),
 /* harmony export */   "STORE": () => (/* binding */ STORE),
 /* harmony export */   "VIDEO_LIST": () => (/* binding */ VIDEO_LIST)
 /* harmony export */ });
@@ -449,11 +452,12 @@ var DOM_STRING = {
   SEARCH_BUTTOM: '.search-input__search-button',
   SEARCH_INPUT: '.search-input__keyword',
   SEARCH_NO_RESULT: '.search-result.search-result--no-result',
+  MODAL_OPEN_BUTTON: '#search-modal-button'
+};
+var CLASS_NAME_STRING = {
   HIDE: 'hide',
-  MODAL_OPEN_BUTTON: '#search-modal-button',
-  SKELETON: 'skeleton',
-  VIDEO_ITEM_SAVE_BUTTON: 'video-item__save-button',
-  VIDEO_ITEM: 'video-item'
+  VIDEO_ITEM: 'video-item',
+  VIDEO_ITEM_SAVE_BUTTON: 'video-item__save-button'
 };
 var ERROR_MESSAGE = {
   DATA_PROCESSING_ERROR: '데이터 처리 중 오류가 발생했습니다.',
@@ -466,6 +470,12 @@ var STORE = {
 };
 var VIDEO_LIST = {
   RENDER_SIZE: 10
+};
+var SCROLL = {
+  ADDITIONAL_OFFSET: 300
+};
+var KEY_CODE = {
+  ENTER: 13
 };
 
 /***/ }),
@@ -484,7 +494,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants.js */ "./src/js/utils/constants.js");
 
 var validator = {
-  isValidSearchInput: function isValidSearchInput(searchInput) {
+  checkSearchInput: function checkSearchInput(searchInput) {
     if (isEmptyInput(searchInput)) {
       throw new Error(_constants_js__WEBPACK_IMPORTED_MODULE_0__.ERROR_MESSAGE.EMPTY_INPUT);
     }
@@ -603,7 +613,8 @@ var ModalView = /*#__PURE__*/function () {
 
     this.registerDOM();
     this.videoItemList = [];
-    this.enabledScrollSearch = true;
+    this.enabledScrollSearch = false;
+    this.searchInputValue = '';
   }
 
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(ModalView, [{
@@ -619,15 +630,15 @@ var ModalView = /*#__PURE__*/function () {
   }, {
     key: "showModal",
     value: function showModal() {
-      this.$modalContainer.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
-      this.$searchNoResult.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+      this.$modalContainer.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.HIDE);
+      this.$searchNoResult.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.HIDE);
       this.$searchInput.value = '';
       this.$searchInput.focus();
     }
   }, {
     key: "hideModal",
     value: function hideModal() {
-      this.$modalContainer.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+      this.$modalContainer.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.HIDE);
     }
   }, {
     key: "controlScrollSearch",
@@ -645,11 +656,13 @@ var ModalView = /*#__PURE__*/function () {
       var _this = this;
 
       this.$searchButton.addEventListener('click', function () {
-        callback(_this.$searchInput.value);
+        _this.searchInputValue = _this.$searchInput.value;
+        callback(_this.searchInputValue);
       });
       this.$searchInput.addEventListener('keyup', function (e) {
-        if (e.keyCode === 13) {
-          callback(_this.$searchInput.value);
+        if (e.keyCode === _utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.KEY_CODE.ENTER) {
+          _this.searchInputValue = _this.$searchInput.value;
+          callback(_this.searchInputValue);
         }
       });
     }
@@ -660,8 +673,8 @@ var ModalView = /*#__PURE__*/function () {
 
       this.$videoList.addEventListener('scroll', function () {
         (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.throttle)(function () {
-          if (_this2.$videoList.scrollHeight - _this2.$videoList.scrollTop <= _this2.$videoList.offsetHeight && _this2.enabledScrollSearch) {
-            callback(_this2.$searchInput.value);
+          if (_this2.$videoList.scrollHeight - _this2.$videoList.scrollTop <= _this2.$videoList.offsetHeight + _utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.SCROLL.ADDITIONAL_OFFSET && _this2.enabledScrollSearch) {
+            callback(_this2.searchInputValue);
           }
         });
       });
@@ -670,8 +683,8 @@ var ModalView = /*#__PURE__*/function () {
     key: "bindVideoListClickStoreButton",
     value: function bindVideoListClickStoreButton(callback) {
       this.$videoList.addEventListener('click', function (event) {
-        if ((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target.classList).includes(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.VIDEO_ITEM_SAVE_BUTTON)) {
-          event.target.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+        if ((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target.classList).includes(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.VIDEO_ITEM_SAVE_BUTTON)) {
+          event.target.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.HIDE);
           callback(event.target.dataset.videoid);
         }
       });
@@ -679,16 +692,16 @@ var ModalView = /*#__PURE__*/function () {
   }, {
     key: "resetVideoList",
     value: function resetVideoList() {
-      this.$searchNoResult.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
-      this.$videoList.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+      this.$searchNoResult.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.HIDE);
+      this.$videoList.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.HIDE);
       this.$videoList.textContent = '';
       this.videoItemList = [];
     }
   }, {
     key: "showNoResult",
     value: function showNoResult() {
-      this.$searchNoResult.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
-      this.$videoList.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.HIDE);
+      this.$searchNoResult.classList.remove(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.HIDE);
+      this.$videoList.classList.add(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.HIDE);
     }
   }, {
     key: "updateVideoItems",
@@ -717,7 +730,7 @@ var ModalView = /*#__PURE__*/function () {
 }();
 
 function _appendEmptyList2() {
-  this.$videoList.insertAdjacentHTML('beforeend', "<li class=".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.DOM_STRING.VIDEO_ITEM, "></li>").repeat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.VIDEO_LIST.RENDER_SIZE));
+  this.$videoList.insertAdjacentHTML('beforeend', "<li class=".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.CLASS_NAME_STRING.VIDEO_ITEM, "></li>").repeat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.VIDEO_LIST.RENDER_SIZE));
 }
 
 function _appendVideoItem2() {
@@ -768,7 +781,7 @@ var VideoItemView = /*#__PURE__*/function () {
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(VideoItemView, [{
     key: "renderVideoItemTemplate",
     value: function renderVideoItemTemplate(parseData) {
-      var template = "\n      <img \n        src=".concat(parseData.url, "\n        alt=\"video-item-thumbnail\" class=\"video-item__thumbnail\" loading=\"lazy\" />\n      <h4 class=\"video-item__title\">").concat(parseData.title, "</h4>\n      <p class=\"video-item__channel-nagetVideoItemTemplateme\">").concat(parseData.channelTitle, "</p>\n      <p class=\"video-item__published-date \">").concat(parseData.publishedAt, "</p>\n      <button data-videoid=").concat(parseData.videoId, " class=\"video-item__save-button button \n      ").concat(_managers_storageManager_js__WEBPACK_IMPORTED_MODULE_2__["default"].hasVideoID(parseData.videoId) ? "".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.DOM_STRING.HIDE) : '', "\"> \n      \u2B07 \uC800\uC7A5\n      </button>\n    ");
+      var template = "\n      <img \n        src=".concat(parseData.url, "\n        alt=\"video-item-thumbnail\" class=\"video-item__thumbnail\" loading=\"lazy\" />\n      <h4 class=\"video-item__title\">").concat(parseData.title, "</h4>\n      <p class=\"video-item__channel-nagetVideoItemTemplateme\">").concat(parseData.channelTitle, "</p>\n      <p class=\"video-item__published-date \">").concat(parseData.publishedAt, "</p>\n      <button data-videoid=").concat(parseData.videoId, " class=\"video-item__save-button button \n      ").concat(_managers_storageManager_js__WEBPACK_IMPORTED_MODULE_2__["default"].hasVideoID(parseData.videoId) ? "".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.CLASS_NAME_STRING.HIDE) : '', "\"> \n      \u2B07 \uC800\uC7A5\n      </button>\n    ");
       this.$element.textContent = '';
       this.$element.insertAdjacentHTML('afterbegin', template);
     }
