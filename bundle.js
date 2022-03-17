@@ -278,18 +278,21 @@ var EventHandler = /*#__PURE__*/function () {
                   return video.id;
                 });
                 renderedVideoIdList = this.mainView.getRenderedVideoIdList();
+                console.log(renderedVideoIdList);
                 willRequestVideoIdList = videoIdList.filter(function (id) {
                   return !renderedVideoIdList.includes(id);
                 });
+                console.log(willRequestVideoIdList);
                 this.mainView.showSkeletonVideoList(willRequestVideoIdList);
-                _context5.next = 6;
+                _context5.next = 8;
                 return _managers_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
 
-              case 6:
+              case 8:
                 videoData = _context5.sent;
+                console.log(videoData);
                 this.mainView.updateVideoItems(videoData);
 
-              case 8:
+              case 11:
               case "end":
                 return _context5.stop();
             }
@@ -335,44 +338,24 @@ __webpack_require__.r(__webpack_exports__);
 var APIUtil = {
   fetchData: function fetchData(requestURL) {
     return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
-      var response, responseData;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _context.next = 3;
-              return fetch(requestURL);
+              return _context.abrupt("return", _utils_mockData_js__WEBPACK_IMPORTED_MODULE_3__.videoData);
 
-            case 3:
-              response = _context.sent;
-
-              if (response.ok) {
-                _context.next = 6;
-                break;
-              }
-
-              throw new Error();
-
-            case 6:
-              _context.next = 8;
-              return response.json();
-
-            case 8:
-              responseData = _context.sent;
-              return _context.abrupt("return", responseData);
-
-            case 12:
-              _context.prev = 12;
+            case 4:
+              _context.prev = 4;
               _context.t0 = _context["catch"](0);
               throw new Error(_utils_constants_js__WEBPACK_IMPORTED_MODULE_2__.ERROR_MESSAGE.SEARCH_ERROR);
 
-            case 15:
+            case 7:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 12]]);
+      }, _callee, null, [[0, 4]]);
     }))();
   },
   createQueryString: function createQueryString(endPoint, params) {
@@ -1322,11 +1305,9 @@ var MainView = /*#__PURE__*/function () {
   }, {
     key: "getRenderedVideoIdList",
     value: function getRenderedVideoIdList() {
-      if (this.$currentVideoList === this.$willSeeVideoList) {
-        return (0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(this.$currentVideoList.childNodes).map(function (videoItem) {
-          return videoItem.dataset.videoid;
-        });
-      } else {}
+      return (0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(this.$currentVideoList.childNodes).map(function (videoItem) {
+        return videoItem.dataset.videoid;
+      });
     }
   }, {
     key: "showSkeletonVideoList",
