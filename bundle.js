@@ -199,7 +199,7 @@ var EventHandler = /*#__PURE__*/function () {
     key: "onWillSeeButtonClick",
     value: function () {
       var _onWillSeeButtonClick = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee3() {
-        var videoList, videoIdList, renderedVideoIdList, willRequestVideoIdList, videoData;
+        var videoList;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -214,24 +214,9 @@ var EventHandler = /*#__PURE__*/function () {
                 return _context3.abrupt("return");
 
               case 3:
-                videoIdList = videoList.map(function (video) {
-                  return video.id;
-                });
-                renderedVideoIdList = this.mainView.getRenderedVideoIdList();
-                willRequestVideoIdList = videoIdList.filter(function (id) {
-                  return !renderedVideoIdList.includes(id);
-                });
-                console.log(willRequestVideoIdList);
-                this.mainView.showSkeletonVideoList(willRequestVideoIdList);
-                _context3.next = 10;
-                return _managers_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
+                this.showStoredVideoItems(videoList);
 
-              case 10:
-                videoData = _context3.sent;
-                console.log(videoData);
-                this.mainView.updateVideoItems(videoData);
-
-              case 13:
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -249,7 +234,7 @@ var EventHandler = /*#__PURE__*/function () {
     key: "onSawButtonClick",
     value: function () {
       var _onSawButtonClick = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee4() {
-        var videoList, renderedVideoIdList, willRequestVideoIdList, videoData;
+        var videoList;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -264,19 +249,9 @@ var EventHandler = /*#__PURE__*/function () {
                 return _context4.abrupt("return");
 
               case 3:
-                renderedVideoIdList = this.mainView.getRenderedVideoIdList();
-                willRequestVideoIdList = videoList.filter(function (id) {
-                  return !renderedVideoIdList.includes(id);
-                });
-                this.mainView.showSkeletonVideoList(willRequestVideoIdList);
-                _context4.next = 8;
-                return _managers_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
+                this.showStoredVideoItems(videoList);
 
-              case 8:
-                videoData = _context4.sent;
-                this.mainView.updateVideoItems(videoData);
-
-              case 10:
+              case 4:
               case "end":
                 return _context4.stop();
             }
@@ -289,6 +264,44 @@ var EventHandler = /*#__PURE__*/function () {
       }
 
       return onSawButtonClick;
+    }()
+  }, {
+    key: "showStoredVideoItems",
+    value: function () {
+      var _showStoredVideoItems = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee5(videoList) {
+        var videoIdList, renderedVideoIdList, willRequestVideoIdList, videoData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                videoIdList = videoList.map(function (video) {
+                  return video.id;
+                });
+                renderedVideoIdList = this.mainView.getRenderedVideoIdList();
+                willRequestVideoIdList = videoIdList.filter(function (id) {
+                  return !renderedVideoIdList.includes(id);
+                });
+                this.mainView.showSkeletonVideoList(willRequestVideoIdList);
+                _context5.next = 6;
+                return _managers_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
+
+              case 6:
+                videoData = _context5.sent;
+                this.mainView.updateVideoItems(videoData);
+
+              case 8:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      function showStoredVideoItems(_x3) {
+        return _showStoredVideoItems.apply(this, arguments);
+      }
+
+      return showStoredVideoItems;
     }()
   }]);
 
@@ -522,27 +535,25 @@ var storeVideoAPICaller = {
             case 0:
               _context.prev = 0;
               _this.queryItems.id = videoIdList.join(',');
-              console.log(_this.queryItems.id);
               requestURL = _APIUtil_js__WEBPACK_IMPORTED_MODULE_2__["default"].createQueryString(_this.endPoint, _this.queryItems);
-              console.log(requestURL);
-              _context.next = 7;
+              _context.next = 5;
               return _APIUtil_js__WEBPACK_IMPORTED_MODULE_2__["default"].fetchData(requestURL);
 
-            case 7:
+            case 5:
               rawData = _context.sent;
               return _context.abrupt("return", _this.parsingVideoData(rawData));
 
-            case 11:
-              _context.prev = 11;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](0);
               throw _context.t0;
 
-            case 14:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 9]]);
     }))();
   },
   parsingVideoData: function parsingVideoData(rawData) {
@@ -1313,11 +1324,9 @@ var MainView = /*#__PURE__*/function () {
     value: function getRenderedVideoIdList() {
       if (this.$currentVideoList === this.$willSeeVideoList) {
         return (0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(this.$currentVideoList.childNodes).map(function (videoItem) {
-          return videoItem;
+          return videoItem.dataset.videoid;
         });
-      } else {
-        this.sawVideoList.push(new _VideoItemView_js__WEBPACK_IMPORTED_MODULE_5__["default"](li));
-      }
+      } else {}
     }
   }, {
     key: "showSkeletonVideoList",
@@ -1349,11 +1358,11 @@ var MainView = /*#__PURE__*/function () {
     value: function updateVideoItems(videoListData) {
       if (this.$currentVideoList === this.$willSeeVideoList) {
         this.willSeeVideoList.slice(-videoListData.length).forEach(function (videoItem, index) {
-          return videoItem.renderVideoItemTemplate(videoListData[index]);
+          return videoItem.renderWillSeeVideoItemTemplate(videoListData[index]);
         });
       } else {
         this.sawVideoList.slice(-videoListData.length).forEach(function (videoItem, index) {
-          return videoItem.renderVideoItemTemplate(videoListData[index]);
+          return videoItem.renderSawVideoItemTemplate(videoListData[index]);
         });
       }
     }
@@ -1633,9 +1642,30 @@ var VideoItemView = /*#__PURE__*/function () {
   }
 
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(VideoItemView, [{
+    key: "getMainTemplate",
+    value: function getMainTemplate(parseData) {
+      return "\n      <img \n        src=".concat(parseData.url, "\n        alt=\"video-item-thumbnail\" class=\"video-item__thumbnail\" loading=\"lazy\" />\n      <h4 class=\"video-item__title\">").concat(parseData.title, "</h4>\n      <p class=\"video-item__channel-nagetVideoItemTemplateme\">").concat(parseData.channelTitle, "</p>\n      <p class=\"video-item__published-date \">").concat(parseData.publishedAt, "</p>\n    ");
+    }
+  }, {
     key: "renderVideoItemTemplate",
     value: function renderVideoItemTemplate(parseData) {
-      var template = "\n      <img \n        src=".concat(parseData.url, "\n        alt=\"video-item-thumbnail\" class=\"video-item__thumbnail\" loading=\"lazy\" />\n      <h4 class=\"video-item__title\">").concat(parseData.title, "</h4>\n      <p class=\"video-item__channel-nagetVideoItemTemplateme\">").concat(parseData.channelTitle, "</p>\n      <p class=\"video-item__published-date \">").concat(parseData.publishedAt, "</p>\n      <button data-videoid=").concat(parseData.videoId, " class=\"video-item__save-button button \n      ").concat(_managers_videoStore_js__WEBPACK_IMPORTED_MODULE_2__["default"].hasVideoId(parseData.videoId) ? "".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.CLASS_NAME_STRING.HIDE) : '', "\"> \n      \u2B07 \uC800\uC7A5\n      </button>\n    ");
+      var template = "\n      ".concat(this.getMainTemplate(parseData), "\n      <button data-videoid=").concat(parseData.videoId, " class=\"video-item__save-button button \n      ").concat(_managers_videoStore_js__WEBPACK_IMPORTED_MODULE_2__["default"].hasVideoId(parseData.videoId) ? "".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.CLASS_NAME_STRING.HIDE) : '', "\"> \n      \u2B07 \uC800\uC7A5\n      </button>\n    ");
+      this.$element.textContent = '';
+      this.$element.insertAdjacentHTML('afterbegin', template);
+    }
+  }, {
+    key: "renderWillSeeVideoItemTemplate",
+    value: function renderWillSeeVideoItemTemplate(parseData) {
+      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div>\n      <button>\u2705</button>\n      <button>\uD83D\uDDD1</button>\n    </div>\n    ");
+      this.$element.setAttribute('data-videoid', parseData.videoId);
+      this.$element.textContent = '';
+      this.$element.insertAdjacentHTML('afterbegin', template);
+    }
+  }, {
+    key: "renderSawVideoItemTemplate",
+    value: function renderSawVideoItemTemplate(parseData) {
+      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div>\n      <button>\u2705</button>\n      <button>\uD83D\uDDD1</button>\n    </div>\n    ");
+      this.$element.setAttribute('data-videoid', parseData.videoId);
       this.$element.textContent = '';
       this.$element.insertAdjacentHTML('afterbegin', template);
     }
