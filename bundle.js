@@ -59,8 +59,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _view_MainView_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../view/MainView.js */ "./src/js/view/MainView.js");
 /* harmony import */ var _view_ModalView_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../view/ModalView.js */ "./src/js/view/ModalView.js");
 /* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/validator.js */ "./src/js/utils/validator.js");
-/* harmony import */ var _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../managers/storageManager.js */ "./src/js/managers/storageManager.js");
-/* harmony import */ var _managers_videoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../managers/videoAPICaller.js */ "./src/js/managers/videoAPICaller.js");
+/* harmony import */ var _managers_searchVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../managers/searchVideoAPICaller.js */ "./src/js/managers/searchVideoAPICaller.js");
+/* harmony import */ var _managers_videoStore_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../managers/videoStore.js */ "./src/js/managers/videoStore.js");
+/* harmony import */ var _managers_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../managers/storeVideoAPICaller.js */ "./src/js/managers/storeVideoAPICaller.js");
+
 
 
 
@@ -84,6 +86,8 @@ var EventHandler = /*#__PURE__*/function () {
     key: "setBindEvents",
     value: function setBindEvents() {
       this.mainView.bindModalOpenButton(this.onModalOpenButtonClick.bind(this));
+      this.mainView.bindWillSeeButton(this.onWillSeeButtonClick.bind(this));
+      this.mainView.bindSawButton(this.onSawButtonClick.bind(this));
       this.modalView.bindOnClickSearchButton(this.onSearchButtonClick.bind(this));
       this.modalView.bindOnClickDimmer(this.onDimmerClick.bind(this));
       this.modalView.bindVideoListScroll(this.onVideoListScroll.bind(this));
@@ -103,7 +107,7 @@ var EventHandler = /*#__PURE__*/function () {
     key: "onStoreButtonClick",
     value: function onStoreButtonClick(videoId) {
       try {
-        _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_7__["default"].storeVideoId(videoId);
+        _managers_videoStore_js__WEBPACK_IMPORTED_MODULE_8__["default"].storeVideoWithVideoId(videoId);
       } catch (error) {
         alert(error.message);
       }
@@ -122,7 +126,7 @@ var EventHandler = /*#__PURE__*/function () {
                 this.modalView.resetVideoList();
                 this.modalView.showLoadingVideoItems();
                 _context.next = 6;
-                return _managers_videoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getVideoListData(inputValue);
+                return _managers_searchVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_7__["default"].getVideoListData(inputValue);
 
               case 6:
                 videoListData = _context.sent;
@@ -163,7 +167,7 @@ var EventHandler = /*#__PURE__*/function () {
                 _context2.prev = 0;
                 this.modalView.showLoadingVideoItems();
                 _context2.next = 4;
-                return _managers_videoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getVideoListData(inputValue);
+                return _managers_searchVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_7__["default"].getVideoListData(inputValue);
 
               case 4:
                 videoListData = _context2.sent;
@@ -191,6 +195,101 @@ var EventHandler = /*#__PURE__*/function () {
 
       return onVideoListScroll;
     }()
+  }, {
+    key: "onWillSeeButtonClick",
+    value: function () {
+      var _onWillSeeButtonClick = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee3() {
+        var videoList, videoIdList, renderedVideoIdList, willRequestVideoIdList, videoData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                videoList = _managers_videoStore_js__WEBPACK_IMPORTED_MODULE_8__["default"].getWillSeeVideoList();
+
+                if (!(videoList.length === 0)) {
+                  _context3.next = 3;
+                  break;
+                }
+
+                return _context3.abrupt("return");
+
+              case 3:
+                videoIdList = videoList.map(function (video) {
+                  return video.id;
+                });
+                renderedVideoIdList = this.mainView.getRenderedVideoIdList();
+                willRequestVideoIdList = videoIdList.filter(function (id) {
+                  return !renderedVideoIdList.includes(id);
+                });
+                console.log(willRequestVideoIdList);
+                this.mainView.showSkeletonVideoList(willRequestVideoIdList);
+                _context3.next = 10;
+                return _managers_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
+
+              case 10:
+                videoData = _context3.sent;
+                console.log(videoData);
+                this.mainView.updateVideoItems(videoData);
+
+              case 13:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function onWillSeeButtonClick() {
+        return _onWillSeeButtonClick.apply(this, arguments);
+      }
+
+      return onWillSeeButtonClick;
+    }()
+  }, {
+    key: "onSawButtonClick",
+    value: function () {
+      var _onSawButtonClick = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().mark(function _callee4() {
+        var videoList, renderedVideoIdList, willRequestVideoIdList, videoData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                videoList = _managers_videoStore_js__WEBPACK_IMPORTED_MODULE_8__["default"].getSawVideoList();
+
+                if (!(videoList.length === 0)) {
+                  _context4.next = 3;
+                  break;
+                }
+
+                return _context4.abrupt("return");
+
+              case 3:
+                renderedVideoIdList = this.mainView.getRenderedVideoIdList();
+                willRequestVideoIdList = videoList.filter(function (id) {
+                  return !renderedVideoIdList.includes(id);
+                });
+                this.mainView.showSkeletonVideoList(willRequestVideoIdList);
+                _context4.next = 8;
+                return _managers_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
+
+              case 8:
+                videoData = _context4.sent;
+                this.mainView.updateVideoItems(videoData);
+
+              case 10:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function onSawButtonClick() {
+        return _onSawButtonClick.apply(this, arguments);
+      }
+
+      return onSawButtonClick;
+    }()
   }]);
 
   return EventHandler;
@@ -200,10 +299,10 @@ var EventHandler = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./src/js/managers/APIManager.js":
-/*!***************************************!*\
-  !*** ./src/js/managers/APIManager.js ***!
-  \***************************************/
+/***/ "./src/js/managers/APIUtil.js":
+/*!************************************!*\
+  !*** ./src/js/managers/APIUtil.js ***!
+  \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -215,10 +314,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
+/* harmony import */ var _utils_mockData_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/mockData.js */ "./src/js/utils/mockData.js");
 
 
 
-var APIManager = {
+
+var APIUtil = {
   fetchData: function fetchData(requestURL) {
     return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
       var response, responseData;
@@ -262,59 +363,19 @@ var APIManager = {
     }))();
   },
   createQueryString: function createQueryString(endPoint, params) {
-    return endPoint + '?' + new URLSearchParams(params).toString();
+    return endPoint + '?' + Object.entries(params).map(function (pair) {
+      return pair[0] + '=' + pair[1];
+    }).join('&');
   }
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (APIManager);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (APIUtil);
 
 /***/ }),
 
-/***/ "./src/js/managers/storageManager.js":
-/*!*******************************************!*\
-  !*** ./src/js/managers/storageManager.js ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
-/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/validator.js */ "./src/js/utils/validator.js");
-
-
-var storageManager = {
-  KEY: {
-    VIDEO_ID_LIST: 'videoId'
-  },
-  storeVideoId: function storeVideoId(videoId) {
-    try {
-      var videoIdList = this.getVideoIdList();
-      _utils_validator_js__WEBPACK_IMPORTED_MODULE_1__["default"].checkOverVideoIdListMaxLength(videoIdList);
-      var videoIdSet = new Set(videoIdList).add(videoId);
-      localStorage.setItem(this.KEY.VIDEO_ID_LIST, JSON.stringify((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(videoIdSet)));
-    } catch (error) {
-      throw error;
-    }
-  },
-  getVideoIdList: function getVideoIdList() {
-    var videoIdList = JSON.parse(localStorage.getItem(this.KEY.VIDEO_ID_LIST));
-    return videoIdList || [];
-  },
-  hasVideoID: function hasVideoID(videoId) {
-    var videoIdList = this.getVideoIdList();
-    return videoIdList && videoIdList.includes(videoId);
-  }
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (storageManager);
-
-/***/ }),
-
-/***/ "./src/js/managers/videoAPICaller.js":
-/*!*******************************************!*\
-  !*** ./src/js/managers/videoAPICaller.js ***!
-  \*******************************************/
+/***/ "./src/js/managers/searchVideoAPICaller.js":
+/*!*************************************************!*\
+  !*** ./src/js/managers/searchVideoAPICaller.js ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -326,12 +387,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
-/* harmony import */ var _APIManager_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./APIManager.js */ "./src/js/managers/APIManager.js");
+/* harmony import */ var _APIUtil_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./APIUtil.js */ "./src/js/managers/APIUtil.js");
 
 
 
 
-var videoAPICaller = {
+var searchVideoAPICaller = {
   endPoint: 'https://vigorous-boyd-74648a.netlify.app/youtube/v3/search',
   queryItems: {
     part: 'snippet',
@@ -352,9 +413,9 @@ var videoAPICaller = {
             case 0:
               _context.prev = 0;
               _this.queryItems.q = inputValue;
-              requestURL = _APIManager_js__WEBPACK_IMPORTED_MODULE_3__["default"].createQueryString(_this.endPoint, _this.queryItems);
+              requestURL = _APIUtil_js__WEBPACK_IMPORTED_MODULE_3__["default"].createQueryString(_this.endPoint, _this.queryItems);
               _context.next = 5;
-              return _APIManager_js__WEBPACK_IMPORTED_MODULE_3__["default"].fetchData(requestURL);
+              return _APIUtil_js__WEBPACK_IMPORTED_MODULE_3__["default"].fetchData(requestURL);
 
             case 5:
               rawData = _context.sent;
@@ -395,7 +456,172 @@ var videoAPICaller = {
     return !responseData.nextPageToken;
   }
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (videoAPICaller);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (searchVideoAPICaller);
+
+/***/ }),
+
+/***/ "./src/js/managers/storageUtil.js":
+/*!****************************************!*\
+  !*** ./src/js/managers/storageUtil.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var storageUtil = {
+  getItem: function getItem(key) {
+    return JSON.parse(localStorage.getItem(key));
+  },
+  setItem: function setItem(key, item) {
+    localStorage.setItem(key, JSON.stringify(item));
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (storageUtil);
+
+/***/ }),
+
+/***/ "./src/js/managers/storeVideoAPICaller.js":
+/*!************************************************!*\
+  !*** ./src/js/managers/storeVideoAPICaller.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _APIUtil_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./APIUtil.js */ "./src/js/managers/APIUtil.js");
+/* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
+
+
+
+
+var storeVideoAPICaller = {
+  endPoint: 'https://vigorous-boyd-74648a.netlify.app/youtube/v3/videos',
+  queryItems: {
+    part: 'snippet',
+    type: 'video',
+    regionCode: 'KR',
+    id: ''
+  },
+  getVideoListData: function getVideoListData(videoIdList) {
+    var _this = this;
+
+    return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
+      var requestURL, rawData;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              _this.queryItems.id = videoIdList.join(',');
+              console.log(_this.queryItems.id);
+              requestURL = _APIUtil_js__WEBPACK_IMPORTED_MODULE_2__["default"].createQueryString(_this.endPoint, _this.queryItems);
+              console.log(requestURL);
+              _context.next = 7;
+              return _APIUtil_js__WEBPACK_IMPORTED_MODULE_2__["default"].fetchData(requestURL);
+
+            case 7:
+              rawData = _context.sent;
+              return _context.abrupt("return", _this.parsingVideoData(rawData));
+
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](0);
+              throw _context.t0;
+
+            case 14:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 11]]);
+    }))();
+  },
+  parsingVideoData: function parsingVideoData(rawData) {
+    try {
+      return rawData.items.map(function (item) {
+        return {
+          videoId: item.id.videoId,
+          publishedAt: item.snippet.publishedAt,
+          title: item.snippet.title,
+          url: item.snippet.thumbnails.medium.url,
+          channelTitle: item.snippet.channelTitle
+        };
+      });
+    } catch (error) {
+      throw new Error(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.ERROR_MESSAGE.DATA_PROCESSING_ERROR);
+    }
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (storeVideoAPICaller);
+
+/***/ }),
+
+/***/ "./src/js/managers/videoStore.js":
+/*!***************************************!*\
+  !*** ./src/js/managers/videoStore.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/validator.js */ "./src/js/utils/validator.js");
+/* harmony import */ var _storageUtil_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./storageUtil.js */ "./src/js/managers/storageUtil.js");
+
+
+var videoStore = {
+  KEY: {
+    STORED_VIDEO_LIST: 'storedVideoList'
+  },
+  storeVideoWithVideoId: function storeVideoWithVideoId(videoId) {
+    try {
+      var storedVideoList = this.getStoredVideoList();
+      _utils_validator_js__WEBPACK_IMPORTED_MODULE_0__["default"].checkStoredVideoListOverMaxLength(storedVideoList);
+      storedVideoList.push({
+        id: videoId,
+        saw: false
+      });
+      _storageUtil_js__WEBPACK_IMPORTED_MODULE_1__["default"].setItem(this.KEY.STORED_VIDEO_LIST, storedVideoList);
+    } catch (error) {
+      throw error;
+    }
+  },
+  getStoredVideoList: function getStoredVideoList() {
+    var _storageUtil$getItem;
+
+    return (_storageUtil$getItem = _storageUtil_js__WEBPACK_IMPORTED_MODULE_1__["default"].getItem(this.KEY.STORED_VIDEO_LIST)) !== null && _storageUtil$getItem !== void 0 ? _storageUtil$getItem : [];
+  },
+  hasVideoId: function hasVideoId(videoId) {
+    var storedVideoList = this.getStoredVideoList();
+    return storedVideoList.some(function (storedVideo) {
+      return storedVideo.id === videoId;
+    });
+  },
+  getWillSeeVideoList: function getWillSeeVideoList() {
+    var videoList = this.getStoredVideoList();
+    return videoList.filter(function (videoData) {
+      return !videoData.saw;
+    });
+  },
+  getSawVideoList: function getSawVideoList() {
+    var videoList = this.getStoredVideoList();
+    return videoList.filter(function (videoData) {
+      return videoData.saw;
+    });
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (videoStore);
 
 /***/ }),
 
@@ -466,7 +692,7 @@ var ERROR_MESSAGE = {
   EMPTY_INPUT: '입력된 글자가 없습니다. 한 글자 이상의 검색어를 입력해주세요.'
 };
 var STORE = {
-  VIDEO_ID_LIST_MAX_LENGTH: 100
+  VIDEO_LIST_MAX_LENGTH: 100
 };
 var VIDEO_LIST = {
   RENDER_SIZE: 10
@@ -477,6 +703,526 @@ var SCROLL = {
 var KEY_CODE = {
   ENTER: 13
 };
+
+/***/ }),
+
+/***/ "./src/js/utils/mockData.js":
+/*!**********************************!*\
+  !*** ./src/js/utils/mockData.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "errorData": () => (/* binding */ errorData),
+/* harmony export */   "mockData": () => (/* binding */ mockData),
+/* harmony export */   "parseData": () => (/* binding */ parseData),
+/* harmony export */   "videoData": () => (/* binding */ videoData)
+/* harmony export */ });
+var mockData = [{
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 0
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 1
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 2
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 3
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 4
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 5
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 6
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 7
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 8
+}, {
+  url: 'https://i.ytimg.com/vi/ECfuKi5-Cfs/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDvmIcX-TgdcH2g_Bd4AUxw6hjmvQ',
+  title: '[Playlist] 너무 좋은데 괜찮으시겠어요?',
+  channelName: 'essential;',
+  publishedDate: '2022년 3월 2일',
+  saveButton: '⬇ 저장',
+  id: 9
+}];
+var videoData = {
+  kind: 'youtube#searchListResponse',
+  etag: 'lQ-VEF9lgCYrZErL9nEFN1I1-_U',
+  nextPageToken: 'CAoQAA',
+  regionCode: 'KR',
+  pageInfo: {
+    totalResults: 604,
+    resultsPerPage: 10
+  },
+  items: [{
+    kind: 'youtube#searchResult',
+    etag: 'utwze-P6EJ5x-0heE9punV2ZcGQ',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'mQhgF7RoUCA'
+    },
+    snippet: {
+      publishedAt: '2021-10-14T19:06:42Z',
+      channelId: 'UCGmYJSYFM19VgwEQJsY12Dg',
+      title: '우아한테크코스 4기 온라인 설명회',
+      description: '2022년 2월에서 11월까지 10개월 과정으로 진행하는 우아한테크코스 4기에 대한 설명회이다. 설명회는 우아한테크코스 교육 ...',
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/mQhgF7RoUCA/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/mQhgF7RoUCA/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/mQhgF7RoUCA/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '박재성',
+      liveBroadcastContent: 'none',
+      publishTime: '2021-10-14T19:06:42Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: '5ArA6FxNCDie_zvTs0C_J-heank',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'ytt37XkcHTU'
+    },
+    snippet: {
+      publishedAt: '2021-06-03T01:41:57Z',
+      channelId: 'UC-mOekGSesms0agFntnQang',
+      title: '[우테코 🎬vlog] Ep.4 그루밍의 하루 ☀️',
+      description: '우테코로그 Ep.4 그루밍의 하루 ☀️ 돌아온 우테코 vlog의 첫 번째 주자는 3기 크루 중 가장 밝은 텐션을 자랑하는 그루밍입니다 : ) 잘 ...',
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/ytt37XkcHTU/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/ytt37XkcHTU/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/ytt37XkcHTU/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '우아한Tech',
+      liveBroadcastContent: 'none',
+      publishTime: '2021-06-03T01:41:57Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: 'MgTCXMypeUICimjHgQasrMiz1Ig',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'nhQRaRgV19o'
+    },
+    snippet: {
+      publishedAt: '2021-09-09T04:04:59Z',
+      channelId: 'UC-mOekGSesms0agFntnQang',
+      title: '[우테코 인터뷰 챌린지] 🎙 코치에게 묻다! 코테뷰 #4 포비',
+      description: "우아한테크코스의 크루들이 진행하는 인터뷰 챌린지입니다.   이번 우테코 인터뷰 챌린지는 '코치 인터뷰'로 진행되었습니다.",
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/nhQRaRgV19o/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/nhQRaRgV19o/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/nhQRaRgV19o/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '우아한Tech',
+      liveBroadcastContent: 'none',
+      publishTime: '2021-09-09T04:04:59Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: 'wT6nFuYCuRdM_6L427Rmrx-dZE4',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'HxzKg7V6r00'
+    },
+    snippet: {
+      publishedAt: '2019-10-05T01:19:06Z',
+      channelId: 'UCipvQqo32UmHkAAwhn-MfbQ',
+      title: '우아한테크코스 1기 합격 노하우 전격 공개. 비전공자 크루가 직접 들려주는 이야기 2편',
+      description: '우아한테크코스 후기를 기록한 영상입니다. 이 영상에서는 우아한테크코스의 선발과정에 대하여 다룹니다. 1편 우아한테크코스 2기?',
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/HxzKg7V6r00/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/HxzKg7V6r00/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/HxzKg7V6r00/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '개발왕루피',
+      liveBroadcastContent: 'none',
+      publishTime: '2019-10-05T01:19:06Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: 'hHO4w55-_FhCWs7lF6gARTbCDPI',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'Xm0SmqBGaBA'
+    },
+    snippet: {
+      publishedAt: '2020-01-08T07:36:40Z',
+      channelId: 'UC-mOekGSesms0agFntnQang',
+      title: '[우테코 🎬vlog] 우테코 1기가 2기에게 전하는 ✉️메세지',
+      description: "2019\uB144 12\uC6D4 27\uC77C \uC6B0\uC544\uD55C\uD14C\uD06C\uCF54\uC2A4\uC758 1\uAE30 \uD06C\uB8E8\uB4E4\uC774 \uAE34 \uD56D\uD574  \uB97C \uB9C8\uCE58\uACE0, \u200D  \uC218\uB8CC\uC2DD \u200D  \uC744 \uAC00\uC84C\uC2B5\uB2C8\uB2E4. \uC774 \uB54C \uD2B9\uBCC4\uD55C \uC2DC\uAC04\uC744 \uAC00\uC838 ...",
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/Xm0SmqBGaBA/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/Xm0SmqBGaBA/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/Xm0SmqBGaBA/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '우아한Tech',
+      liveBroadcastContent: 'none',
+      publishTime: '2020-01-08T07:36:40Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: 'lod3jLdLU-rYGR7AC8AYYZluSK4',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'ZQklkmFlYQI'
+    },
+    snippet: {
+      publishedAt: '2021-07-28T05:20:22Z',
+      channelId: 'UC-mOekGSesms0agFntnQang',
+      title: '[우테코 🎬vlog] Ep.5 우테코 프로젝트 비하인드 🎞',
+      description: '우테코로그 Ep.5 우테코 프로젝트 비하인드 이번 우테코로그는 현재 크루들이 진행하고 있는 프로젝트 선정 비하인드 영상입니다 ...',
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/ZQklkmFlYQI/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/ZQklkmFlYQI/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/ZQklkmFlYQI/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '우아한Tech',
+      liveBroadcastContent: 'none',
+      publishTime: '2021-07-28T05:20:22Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: 'Uh6GOEEuQV7wP5slyO4VQInl9eY',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'r1AWm783YeY'
+    },
+    snippet: {
+      publishedAt: '2021-09-09T03:30:44Z',
+      channelId: 'UC-mOekGSesms0agFntnQang',
+      title: '[우테코 인터뷰 챌린지] 🎙 코치에게 묻다! 코테뷰 #3 포코',
+      description: "우아한테크코스의 크루들이 진행하는 인터뷰 챌린지입니다.   이번 우테코 인터뷰 챌린지는 '코치 인터뷰'로 진행되었습니다.",
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/r1AWm783YeY/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/r1AWm783YeY/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/r1AWm783YeY/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '우아한Tech',
+      liveBroadcastContent: 'none',
+      publishTime: '2021-09-09T03:30:44Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: '51SjOy2nssfj71Sxh3ix-1Ex8Eg',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'enINkqC7FAc'
+    },
+    snippet: {
+      publishedAt: '2021-07-14T05:16:07Z',
+      channelId: 'UC-mOekGSesms0agFntnQang',
+      title: '[우테코 인터뷰 챌린지] 🧡 프론트엔드 백엔드 서로에게 묻다! #1',
+      description: '우아한테크코스의 크루들이 진행하는 인터뷰 챌린지입니다.   우테코 인터뷰 챌린지 이번 편은 백엔드와 프론트엔드 크루들이 평소에 ...',
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/enINkqC7FAc/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/enINkqC7FAc/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/enINkqC7FAc/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '우아한Tech',
+      liveBroadcastContent: 'none',
+      publishTime: '2021-07-14T05:16:07Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: 'bfS-x6xKV14TESX5ieO6xEfY4vk',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'UGsM1vSTAno'
+    },
+    snippet: {
+      publishedAt: '2021-07-14T06:28:33Z',
+      channelId: 'UC-mOekGSesms0agFntnQang',
+      title: '[우테코 인터뷰 챌린지] 🧡 프론트엔드 백엔드 서로에게 묻다! #3',
+      description: '우아한테크코스의 크루들이 진행하는 인터뷰 챌린지입니다.   우테코 인터뷰 챌린지 이번 편은 백엔드와 프론트엔드 크루들이 평소에 ...',
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/UGsM1vSTAno/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/UGsM1vSTAno/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/UGsM1vSTAno/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '우아한Tech',
+      liveBroadcastContent: 'none',
+      publishTime: '2021-07-14T06:28:33Z'
+    }
+  }, {
+    kind: 'youtube#searchResult',
+    etag: 'K67nj_5cOKajD_nSPwOpiDXjWYY',
+    id: {
+      kind: 'youtube#video',
+      videoId: 'eRffd42sd4I'
+    },
+    snippet: {
+      publishedAt: '2021-11-29T08:06:30Z',
+      channelId: 'UC-mOekGSesms0agFntnQang',
+      title: "[\uC6B0\uD14C\uCF54 \uD83C\uDFACvlog] Ep. 8 \uD83D\uDC7E\uC6B0\uC544\uD55C\uD14C\uD06C\uCF54\uC2A4 3\uAE30 \uB370\uBAA8\uB370\uC774\uD83E\uDDD1\u200D\uD83D\uDCBB\uD83D\uDC69\u200D\uD83D\uDCBB",
+      description: '우테코로그 Ep. 8 우아한테크코스 데모데이   지난 10월 29일, 크루들이 밤낮으로 고생하며 완성한 프로젝트의 최종 데모데이를 진행 ...',
+      thumbnails: {
+        "default": {
+          url: 'https://i.ytimg.com/vi/eRffd42sd4I/default.jpg',
+          width: 120,
+          height: 90
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/eRffd42sd4I/mqdefault.jpg',
+          width: 320,
+          height: 180
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/eRffd42sd4I/hqdefault.jpg',
+          width: 480,
+          height: 360
+        }
+      },
+      channelTitle: '우아한Tech',
+      liveBroadcastContent: 'none',
+      publishTime: '2021-11-29T08:06:30Z'
+    }
+  }]
+};
+var errorData = {
+  error: {
+    code: 400,
+    message: 'API key not valid. Please pass a valid API key.',
+    errors: [{
+      message: 'API key not valid. Please pass a valid API key.',
+      domain: 'global',
+      reason: 'badRequest'
+    }],
+    status: 'INVALID_ARGUMENT',
+    details: [{
+      '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+      reason: 'API_KEY_INVALID',
+      domain: 'googleapis.com',
+      metadata: {
+        service: 'youtube.googleapis.com'
+      }
+    }]
+  }
+};
+var parseData = [{
+  videoId: 'mQhgF7RoUCA',
+  publishedAt: '2021-10-14T19:06:42Z',
+  title: '우아한테크코스 4기 온라인 설명회',
+  url: 'https://i.ytimg.com/vi/mQhgF7RoUCA/mqdefault.jpg',
+  channelTitle: '박재성',
+  isLastPage: false
+}, {
+  videoId: 'ytt37XkcHTU',
+  publishedAt: '2021-06-03T01:41:57Z',
+  title: '[우테코 🎬vlog] Ep.4 그루밍의 하루 ☀️',
+  url: 'https://i.ytimg.com/vi/ytt37XkcHTU/mqdefault.jpg',
+  channelTitle: '우아한Tech',
+  isLastPage: false
+}, {
+  videoId: 'nhQRaRgV19o',
+  publishedAt: '2021-09-09T04:04:59Z',
+  title: '[우테코 인터뷰 챌린지] 🎙 코치에게 묻다! 코테뷰 #4 포비',
+  url: 'https://i.ytimg.com/vi/nhQRaRgV19o/mqdefault.jpg',
+  channelTitle: '우아한Tech',
+  isLastPage: false
+}, {
+  videoId: 'HxzKg7V6r00',
+  publishedAt: '2019-10-05T01:19:06Z',
+  title: '우아한테크코스 1기 합격 노하우 전격 공개. 비전공자 크루가 직접 들려주는 이야기 2편',
+  url: 'https://i.ytimg.com/vi/HxzKg7V6r00/mqdefault.jpg',
+  channelTitle: '개발왕루피',
+  isLastPage: false
+}, {
+  videoId: 'Xm0SmqBGaBA',
+  publishedAt: '2020-01-08T07:36:40Z',
+  title: '[우테코 🎬vlog] 우테코 1기가 2기에게 전하는 ✉️메세지',
+  url: 'https://i.ytimg.com/vi/Xm0SmqBGaBA/mqdefault.jpg',
+  channelTitle: '우아한Tech',
+  isLastPage: false
+}, {
+  videoId: 'ZQklkmFlYQI',
+  publishedAt: '2021-07-28T05:20:22Z',
+  title: '[우테코 🎬vlog] Ep.5 우테코 프로젝트 비하인드 🎞',
+  url: 'https://i.ytimg.com/vi/ZQklkmFlYQI/mqdefault.jpg',
+  channelTitle: '우아한Tech',
+  isLastPage: false
+}, {
+  videoId: 'r1AWm783YeY',
+  publishedAt: '2021-09-09T03:30:44Z',
+  title: '[우테코 인터뷰 챌린지] 🎙 코치에게 묻다! 코테뷰 #3 포코',
+  url: 'https://i.ytimg.com/vi/r1AWm783YeY/mqdefault.jpg',
+  channelTitle: '우아한Tech',
+  isLastPage: false
+}, {
+  videoId: 'enINkqC7FAc',
+  publishedAt: '2021-07-14T05:16:07Z',
+  title: '[우테코 인터뷰 챌린지] 🧡 프론트엔드 백엔드 서로에게 묻다! #1',
+  url: 'https://i.ytimg.com/vi/enINkqC7FAc/mqdefault.jpg',
+  channelTitle: '우아한Tech',
+  isLastPage: false
+}, {
+  videoId: 'UGsM1vSTAno',
+  publishedAt: '2021-07-14T06:28:33Z',
+  title: '[우테코 인터뷰 챌린지] 🧡 프론트엔드 백엔드 서로에게 묻다! #3',
+  url: 'https://i.ytimg.com/vi/UGsM1vSTAno/mqdefault.jpg',
+  channelTitle: '우아한Tech',
+  isLastPage: false
+}, {
+  videoId: 'eRffd42sd4I',
+  publishedAt: '2021-11-29T08:06:30Z',
+  title: "[\uC6B0\uD14C\uCF54 \uD83C\uDFACvlog] Ep. 8 \uD83D\uDC7E\uC6B0\uC544\uD55C\uD14C\uD06C\uCF54\uC2A4 3\uAE30 \uB370\uBAA8\uB370\uC774\uD83E\uDDD1\u200D\uD83D\uDCBB\uD83D\uDC69\u200D\uD83D\uDCBB",
+  url: 'https://i.ytimg.com/vi/eRffd42sd4I/mqdefault.jpg',
+  channelTitle: '우아한Tech',
+  isLastPage: false
+}];
 
 /***/ }),
 
@@ -499,8 +1245,8 @@ var validator = {
       throw new Error(_constants_js__WEBPACK_IMPORTED_MODULE_0__.ERROR_MESSAGE.EMPTY_INPUT);
     }
   },
-  checkOverVideoIdListMaxLength: function checkOverVideoIdListMaxLength(videoIdList) {
-    if (isOverVideoIdListMaxLength(videoIdList)) {
+  checkStoredVideoListOverMaxLength: function checkStoredVideoListOverMaxLength(videoList) {
+    if (isOverVideoListMaxLength(videoList)) {
       throw new Error(_constants_js__WEBPACK_IMPORTED_MODULE_0__.ERROR_MESSAGE.OVER_MAX_STORE_LENGTH);
     }
   }
@@ -510,8 +1256,8 @@ function isEmptyInput(searchInput) {
   return searchInput.trim() === '';
 }
 
-function isOverVideoIdListMaxLength(videoIdList) {
-  return videoIdList.length >= _constants_js__WEBPACK_IMPORTED_MODULE_0__.STORE.VIDEO_ID_LIST_MAX_LENGTH;
+function isOverVideoListMaxLength(videoList) {
+  return videoList.length >= _constants_js__WEBPACK_IMPORTED_MODULE_0__.STORE.VIDEO_LIST_MAX_LENGTH;
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validator);
@@ -529,10 +1275,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ MainView)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
-/* harmony import */ var _utils_common_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/common.js */ "./src/js/utils/common.js");
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
+/* harmony import */ var _utils_common_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/common.js */ "./src/js/utils/common.js");
+/* harmony import */ var _VideoItemView_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./VideoItemView.js */ "./src/js/view/VideoItemView.js");
+
+
+
 
 
 
@@ -540,21 +1291,124 @@ __webpack_require__.r(__webpack_exports__);
 
 var MainView = /*#__PURE__*/function () {
   function MainView() {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MainView);
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, MainView);
 
     this.registerDOM();
+    this.willSeeVideoList = [];
+    this.sawVideoList = [];
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MainView, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(MainView, [{
     key: "registerDOM",
     value: function registerDOM() {
-      this.$modalOpenButton = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_3__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_2__.DOM_STRING.MODAL_OPEN_BUTTON);
+      this.$modalOpenButton = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_4__.$)(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.DOM_STRING.MODAL_OPEN_BUTTON);
+      this.$willSeeButton = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_4__.$)('#will-see-button');
+      this.$sawButton = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_4__.$)('#saw-button');
+      this.$willSeeVideoList = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_4__.$)('#will-see-video-list');
+      this.$sawVideoList = (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_4__.$)('#saw-video-list');
+      this.$currentVideoList = this.$willSeeVideoList;
+    }
+  }, {
+    key: "getRenderedVideoIdList",
+    value: function getRenderedVideoIdList() {
+      if (this.$currentVideoList === this.$willSeeVideoList) {
+        return (0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(this.$currentVideoList.childNodes).map(function (videoItem) {
+          return videoItem;
+        });
+      } else {
+        this.sawVideoList.push(new _VideoItemView_js__WEBPACK_IMPORTED_MODULE_5__["default"](li));
+      }
+    }
+  }, {
+    key: "showSkeletonVideoList",
+    value: function showSkeletonVideoList(videoList) {
+      var _this = this;
+
+      this.$currentVideoList.insertAdjacentHTML('beforeend', "<li class=".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.CLASS_NAME_STRING.VIDEO_ITEM, "></li>").repeat(videoList.length));
+
+      (0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(this.$currentVideoList.childNodes).slice(-videoList.length).forEach(function (li) {
+        if (_this.$currentVideoList === _this.$willSeeVideoList) {
+          _this.willSeeVideoList.push(new _VideoItemView_js__WEBPACK_IMPORTED_MODULE_5__["default"](li));
+        } else {
+          _this.sawVideoList.push(new _VideoItemView_js__WEBPACK_IMPORTED_MODULE_5__["default"](li));
+        }
+      });
+
+      if (this.$currentVideoList === this.$willSeeVideoList) {
+        this.willSeeVideoList.slice(-videoList.length).forEach(function (videoItem) {
+          return videoItem.renderSkeletonTemplate();
+        });
+      } else {
+        this.sawVideoList.slice(-videoList.length).forEach(function (videoItem) {
+          return videoItem.renderSkeletonTemplate();
+        });
+      }
+    }
+  }, {
+    key: "updateVideoItems",
+    value: function updateVideoItems(videoListData) {
+      if (this.$currentVideoList === this.$willSeeVideoList) {
+        this.willSeeVideoList.slice(-videoListData.length).forEach(function (videoItem, index) {
+          return videoItem.renderVideoItemTemplate(videoListData[index]);
+        });
+      } else {
+        this.sawVideoList.slice(-videoListData.length).forEach(function (videoItem, index) {
+          return videoItem.renderVideoItemTemplate(videoListData[index]);
+        });
+      }
     }
   }, {
     key: "bindModalOpenButton",
     value: function bindModalOpenButton(callback) {
       this.$modalOpenButton.addEventListener('click', callback);
     }
+  }, {
+    key: "bindWillSeeButton",
+    value: function bindWillSeeButton(callback) {
+      var _this2 = this;
+
+      this.$willSeeButton.addEventListener('click', function (event) {
+        _this2.$currentVideoList = _this2.$willSeeVideoList;
+
+        _this2.toggleStoreButtons(event.target);
+
+        callback();
+      });
+    }
+  }, {
+    key: "bindSawButton",
+    value: function bindSawButton(callback) {
+      var _this3 = this;
+
+      this.$sawButton.addEventListener('click', function (event) {
+        _this3.$currentVideoList = _this3.$sawVideoList;
+
+        _this3.toggleStoreButtons(event.target);
+
+        callback(event.target);
+      });
+    }
+  }, {
+    key: "toggleStoreButtons",
+    value: function toggleStoreButtons(button) {
+      button.disabled = true;
+      button.classList.add('nav__button-clicked');
+
+      if (button === this.$willSeeButton) {
+        this.$sawButton.disabled = false;
+        this.$sawButton.classList.remove('nav__button-clicked');
+        this.$willSeeVideoList.classList.remove('display-none');
+        this.$sawVideoList.classList.add('display-none');
+      } else {
+        this.$willSeeButton.disabled = false;
+        this.$willSeeButton.classList.remove('nav__button-clicked');
+        this.$willSeeVideoList.classList.add('display-none');
+        this.$sawVideoList.classList.remove('display-none');
+      }
+    }
+  }, {
+    key: "getRenderedVideoId",
+    value: function getRenderedVideoId() {}
   }]);
 
   return MainView;
@@ -764,7 +1618,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _managers_storageManager_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../managers/storageManager.js */ "./src/js/managers/storageManager.js");
+/* harmony import */ var _managers_videoStore_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../managers/videoStore.js */ "./src/js/managers/videoStore.js");
 /* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
 
 
@@ -781,7 +1635,7 @@ var VideoItemView = /*#__PURE__*/function () {
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(VideoItemView, [{
     key: "renderVideoItemTemplate",
     value: function renderVideoItemTemplate(parseData) {
-      var template = "\n      <img \n        src=".concat(parseData.url, "\n        alt=\"video-item-thumbnail\" class=\"video-item__thumbnail\" loading=\"lazy\" />\n      <h4 class=\"video-item__title\">").concat(parseData.title, "</h4>\n      <p class=\"video-item__channel-nagetVideoItemTemplateme\">").concat(parseData.channelTitle, "</p>\n      <p class=\"video-item__published-date \">").concat(parseData.publishedAt, "</p>\n      <button data-videoid=").concat(parseData.videoId, " class=\"video-item__save-button button \n      ").concat(_managers_storageManager_js__WEBPACK_IMPORTED_MODULE_2__["default"].hasVideoID(parseData.videoId) ? "".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.CLASS_NAME_STRING.HIDE) : '', "\"> \n      \u2B07 \uC800\uC7A5\n      </button>\n    ");
+      var template = "\n      <img \n        src=".concat(parseData.url, "\n        alt=\"video-item-thumbnail\" class=\"video-item__thumbnail\" loading=\"lazy\" />\n      <h4 class=\"video-item__title\">").concat(parseData.title, "</h4>\n      <p class=\"video-item__channel-nagetVideoItemTemplateme\">").concat(parseData.channelTitle, "</p>\n      <p class=\"video-item__published-date \">").concat(parseData.publishedAt, "</p>\n      <button data-videoid=").concat(parseData.videoId, " class=\"video-item__save-button button \n      ").concat(_managers_videoStore_js__WEBPACK_IMPORTED_MODULE_2__["default"].hasVideoId(parseData.videoId) ? "".concat(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.CLASS_NAME_STRING.HIDE) : '', "\"> \n      \u2B07 \uC800\uC7A5\n      </button>\n    ");
       this.$element.textContent = '';
       this.$element.insertAdjacentHTML('afterbegin', template);
     }
@@ -826,7 +1680,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n    padding: 64px 0;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: center;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background: #F5F5F5;\n}\n\n.nav__button:hover {\n    background: #ebebeb;\n}\n", "",{"version":3,"sources":["webpack://./src/css/app.css"],"names":[],"mappings":"AAAA;IACI,eAAe;IACf,eAAe;AACnB;;AAEA;IACI,iBAAiB;IACjB,cAAc;AAClB;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,iBAAiB;IACjB,mBAAmB;AACvB;;AAEA;IACI,aAAa;IACb,uBAAuB;AAC3B;;AAEA;IACI,eAAe;IACf,kBAAkB;IAClB,YAAY;IACZ,kBAAkB;IAClB,iBAAiB;IACjB,eAAe;IACf,sBAAsB;AAC1B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;AACvB","sourcesContent":["body {\n    padding: 64px 0;\n    font-size: 16px;\n}\n\n#app {\n    max-width: 1020px;\n    margin: 0 auto;\n}\n\n.classroom-container__title {\n    text-align: center;\n    font-weight: bold;\n    font-size: 34px;\n    line-height: 36px;\n    margin-bottom: 64px;\n}\n\n.nav {\n    display: flex;\n    justify-content: center;\n}\n\n.button {\n    cursor: pointer;\n    border-radius: 4px;\n    border: none;\n    font-style: normal;\n    font-weight: bold;\n    font-size: 14px;\n    letter-spacing: 1.25px;\n}\n\n.nav__button {\n    width: 80px;\n    height: 36px;\n    background: #F5F5F5;\n}\n\n.nav__button:hover {\n    background: #ebebeb;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n  padding: 64px 0;\n  font-size: 16px;\n}\n\n#app {\n  max-width: 1020px;\n  margin: 0 auto;\n}\n\n.classroom-container__title {\n  text-align: center;\n  font-weight: bold;\n  font-size: 34px;\n  line-height: 36px;\n  margin-bottom: 64px;\n}\n\n.nav {\n  display: flex;\n  justify-content: space-between;\n}\n\n.stored-buttons-container {\n  display: flex;\n  justify-content: flex-start;\n}\n\n.button {\n  cursor: pointer;\n  border-radius: 4px;\n  border: none;\n  font-style: normal;\n  font-weight: bold;\n  font-size: 14px;\n  letter-spacing: 1.25px;\n}\n\n.nav__button {\n  width: 80px;\n  height: 36px;\n  background: #f5f5f5;\n  border: 1px solid rgb(226, 226, 226);\n}\n\n.nav__button:hover {\n  background: #ebebeb;\n}\n\n.nav__button-clicked {\n  background-color: #00bcd41f;\n}\n\n.left-store-button {\n  border-radius: 4px 0 0 4px;\n}\n\n.right-store-button {\n  border-radius: 0 4px 4px 0;\n}\n\n.display-none {\n  display: none;\n}\n", "",{"version":3,"sources":["webpack://./src/css/app.css"],"names":[],"mappings":"AAAA;EACE,eAAe;EACf,eAAe;AACjB;;AAEA;EACE,iBAAiB;EACjB,cAAc;AAChB;;AAEA;EACE,kBAAkB;EAClB,iBAAiB;EACjB,eAAe;EACf,iBAAiB;EACjB,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,8BAA8B;AAChC;;AAEA;EACE,aAAa;EACb,2BAA2B;AAC7B;;AAEA;EACE,eAAe;EACf,kBAAkB;EAClB,YAAY;EACZ,kBAAkB;EAClB,iBAAiB;EACjB,eAAe;EACf,sBAAsB;AACxB;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,mBAAmB;EACnB,oCAAoC;AACtC;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,2BAA2B;AAC7B;;AAEA;EACE,0BAA0B;AAC5B;;AAEA;EACE,0BAA0B;AAC5B;;AAEA;EACE,aAAa;AACf","sourcesContent":["body {\n  padding: 64px 0;\n  font-size: 16px;\n}\n\n#app {\n  max-width: 1020px;\n  margin: 0 auto;\n}\n\n.classroom-container__title {\n  text-align: center;\n  font-weight: bold;\n  font-size: 34px;\n  line-height: 36px;\n  margin-bottom: 64px;\n}\n\n.nav {\n  display: flex;\n  justify-content: space-between;\n}\n\n.stored-buttons-container {\n  display: flex;\n  justify-content: flex-start;\n}\n\n.button {\n  cursor: pointer;\n  border-radius: 4px;\n  border: none;\n  font-style: normal;\n  font-weight: bold;\n  font-size: 14px;\n  letter-spacing: 1.25px;\n}\n\n.nav__button {\n  width: 80px;\n  height: 36px;\n  background: #f5f5f5;\n  border: 1px solid rgb(226, 226, 226);\n}\n\n.nav__button:hover {\n  background: #ebebeb;\n}\n\n.nav__button-clicked {\n  background-color: #00bcd41f;\n}\n\n.left-store-button {\n  border-radius: 4px 0 0 4px;\n}\n\n.right-store-button {\n  border-radius: 0 4px 4px 0;\n}\n\n.display-none {\n  display: none;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
