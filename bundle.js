@@ -1380,6 +1380,7 @@ var MainView = /*#__PURE__*/function () {
         return videoList.addEventListener('click', function (event) {
           if ([_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.DOM_STRING.CHECK_WILL_SEE_BUTTON, _utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.DOM_STRING.CHECK_SAW_BUTTON, _utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.DOM_STRING.DELETE_STORE_BUTTON].includes(event.target.id)) {
             var videoId = event.target.closest(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.SELECTOR.VIDEO_ITEM).dataset.videoid;
+            console.log(videoId);
             callback(event.target.id, videoId, _this2.currentStoreType);
 
             _this2.deleteVideoItem(event.target.closest(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.SELECTOR.VIDEO_ITEM));
