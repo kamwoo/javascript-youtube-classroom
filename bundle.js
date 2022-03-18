@@ -465,19 +465,31 @@ var EventHandler = /*#__PURE__*/function () {
                 videoIdList = videoList.map(function (video) {
                   return video.id;
                 });
+                console.log(videoIdList);
                 renderedVideoIdList = this.mainView.getRenderedVideoIdList();
+                console.log(renderedVideoIdList);
                 willRequestVideoIdList = videoIdList.filter(function (id) {
                   return !renderedVideoIdList.includes(id);
                 });
+                console.log(willRequestVideoIdList);
+
+                if (!(willRequestVideoIdList.length === 0)) {
+                  _context3.next = 8;
+                  break;
+                }
+
+                return _context3.abrupt("return");
+
+              case 8:
                 this.mainView.showSkeletonVideoList(willRequestVideoIdList);
-                _context3.next = 6;
+                _context3.next = 11;
                 return _api_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
 
-              case 6:
+              case 11:
                 videoData = _context3.sent;
                 this.mainView.updateVideoItems(videoData);
 
-              case 8:
+              case 13:
               case "end":
                 return _context3.stop();
             }
