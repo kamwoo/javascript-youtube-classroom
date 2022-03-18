@@ -35,24 +35,44 @@ __webpack_require__.r(__webpack_exports__);
 var APIUtil = {
   fetchData: function fetchData(requestURL) {
     return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
+      var response, responseData;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              return _context.abrupt("return", _utils_mockData_js__WEBPACK_IMPORTED_MODULE_3__.videoData);
+              _context.next = 3;
+              return fetch(requestURL);
 
-            case 4:
-              _context.prev = 4;
+            case 3:
+              response = _context.sent;
+
+              if (response.ok) {
+                _context.next = 6;
+                break;
+              }
+
+              throw new Error();
+
+            case 6:
+              _context.next = 8;
+              return response.json();
+
+            case 8:
+              responseData = _context.sent;
+              return _context.abrupt("return", responseData);
+
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](0);
               throw new Error(_utils_constants_js__WEBPACK_IMPORTED_MODULE_2__.ERROR_MESSAGE.SEARCH_ERROR);
 
-            case 7:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 4]]);
+      }, _callee, null, [[0, 12]]);
     }))();
   },
   createQueryString: function createQueryString(endPoint, params) {
