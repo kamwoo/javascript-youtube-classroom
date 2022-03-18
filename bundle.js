@@ -1248,7 +1248,7 @@ var VideoItemView = /*#__PURE__*/function () {
   }, {
     key: "renderWillSeeVideoItemTemplate",
     value: function renderWillSeeVideoItemTemplate(parseData) {
-      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div class=\"video-item-button-container\">\n      <button id=\"check-saw\" class=\"check-saw-button video-item-button\">\u2705</button>\n      <button id-\"delete-store\" class=\"delete-store-button video-item-button\">\uD83D\uDDD1</button>\n    </div>\n    ");
+      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div class=\"video-item-button-container\">\n      <button id=\"check-saw\" class=\"check-saw-button video-item-button\">\u2705</button>\n      <button id=\"delete-store\" class=\"delete-store-button video-item-button\">\uD83D\uDDD1</button>\n    </div>\n    ");
       this.$element.setAttribute('data-videoid', parseData.videoId);
       this.$element.textContent = '';
       this.$element.insertAdjacentHTML('afterbegin', template);
@@ -1256,7 +1256,7 @@ var VideoItemView = /*#__PURE__*/function () {
   }, {
     key: "renderSawVideoItemTemplate",
     value: function renderSawVideoItemTemplate(parseData) {
-      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div class=\"video-item-button-container\">\n      <button id=\"check-will-see\" class=\"check-will-see-button video-item-button\">\u2705</button>\n      <button id-\"delete-store\" class=\"delete-store-button video-item-button\">\uD83D\uDDD1</button>\n    </div>\n    ");
+      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div class=\"video-item-button-container\">\n      <button id=\"check-will-see\" class=\"check-will-see-button video-item-button\">\u2705</button>\n      <button id=\"delete-store\" class=\"delete-store-button video-item-button\">\uD83D\uDDD1</button>\n    </div>\n    ");
       this.$element.setAttribute('data-videoid', parseData.videoId);
       this.$element.textContent = '';
       this.$element.insertAdjacentHTML('afterbegin', template);
