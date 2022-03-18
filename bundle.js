@@ -418,20 +418,21 @@ var EventHandler = /*#__PURE__*/function () {
                 videoListData = _context2.sent;
                 this.modalView.updateVideoItems(videoListData);
                 this.modalView.controlScrollSearch(!videoListData[0].isLastPage);
-                _context2.next = 12;
+                videoListData[0].isLastPage && confirm(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.CONFIRM_MESSAGE.NOTHING_MORE);
+                _context2.next = 13;
                 break;
 
-              case 9:
-                _context2.prev = 9;
+              case 10:
+                _context2.prev = 10;
                 _context2.t0 = _context2["catch"](0);
                 alert(_context2.t0.message);
 
-              case 12:
+              case 13:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 9]]);
+        }, _callee2, this, [[0, 10]]);
       }));
 
       function onVideoListScroll(_x2) {
@@ -465,31 +466,28 @@ var EventHandler = /*#__PURE__*/function () {
                 videoIdList = videoList.map(function (video) {
                   return video.id;
                 });
-                console.log(videoIdList);
                 renderedVideoIdList = this.mainView.getRenderedVideoIdList();
-                console.log(renderedVideoIdList);
                 willRequestVideoIdList = videoIdList.filter(function (id) {
                   return !renderedVideoIdList.includes(id);
                 });
-                console.log(willRequestVideoIdList);
 
                 if (!(willRequestVideoIdList.length === 0)) {
-                  _context3.next = 8;
+                  _context3.next = 5;
                   break;
                 }
 
                 return _context3.abrupt("return");
 
-              case 8:
+              case 5:
                 this.mainView.showSkeletonVideoList(willRequestVideoIdList);
-                _context3.next = 11;
+                _context3.next = 8;
                 return _api_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
 
-              case 11:
+              case 8:
                 videoData = _context3.sent;
                 this.mainView.updateVideoItems(videoData);
 
-              case 13:
+              case 10:
               case "end":
                 return _context3.stop();
             }
@@ -516,8 +514,11 @@ var EventHandler = /*#__PURE__*/function () {
           break;
 
         case _utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.DELETE_STORE_BUTTON:
-          _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_10__["default"].deleteVideoWithId(videoId);
-          this.onStoreTypeButtonsClick(this.mainView.getCurrentStoreType());
+          if (confirm(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.CONFIRM_MESSAGE.DELETE_STORED_VIDEO)) {
+            _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_10__["default"].deleteVideoWithId(videoId);
+            this.onStoreTypeButtonsClick(this.mainView.getCurrentStoreType());
+          }
+
       }
     }
   }]);
@@ -662,6 +663,7 @@ var throttle = function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CONFIRM_MESSAGE": () => (/* binding */ CONFIRM_MESSAGE),
 /* harmony export */   "DOM_STRING": () => (/* binding */ DOM_STRING),
 /* harmony export */   "ERROR_MESSAGE": () => (/* binding */ ERROR_MESSAGE),
 /* harmony export */   "KEY_CODE": () => (/* binding */ KEY_CODE),
@@ -701,6 +703,10 @@ var ERROR_MESSAGE = {
   SEARCH_ERROR: '검색 중 오류가 발생했습니다.',
   OVER_MAX_STORE_LENGTH: '최대 100개까지만 저장 가능합니다.',
   EMPTY_INPUT: '입력된 글자가 없습니다. 한 글자 이상의 검색어를 입력해주세요.'
+};
+var CONFIRM_MESSAGE = {
+  DELETE_STORED_VIDEO: '저장된 영상를 삭제하시겠습니까?',
+  NOTHING_MORE: '더이상 불러올 영상이 없습니다.'
 };
 var STORE = {
   VIDEO_LIST_MAX_LENGTH: 100,
@@ -1444,7 +1450,6 @@ var MainView = /*#__PURE__*/function () {
   }, {
     key: "deleteVideoItem",
     value: function deleteVideoItem(videoElement) {
-      console.log(videoElement);
       var targetIndex = this.videoItemViewLists[this.currentStoreType].findIndex(function (video) {
         return video.getElement() === videoElement;
       });
@@ -1629,8 +1634,6 @@ var ModalView = /*#__PURE__*/function () {
       this.$videoList.addEventListener('scroll', function () {
         (0,_utils_common_js__WEBPACK_IMPORTED_MODULE_5__.throttle)(function () {
           if (_this2.$videoList.scrollHeight - _this2.$videoList.scrollTop <= _this2.$videoList.offsetHeight + _utils_constants_js__WEBPACK_IMPORTED_MODULE_4__.SCROLL.ADDITIONAL_OFFSET && _this2.enabledScrollSearch) {
-            console.log('a');
-
             _this2.controlScrollSearch(false);
 
             callback(_this2.searchInputValue);
