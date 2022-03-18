@@ -698,9 +698,9 @@ var DOM_STRING = {
   HIDE: 'hide',
   VIDEO_ITEM: 'video-item',
   VIDEO_ITEM_SAVE_BUTTON: 'video-item__save-button',
-  CHECK_SAW_BUTTON: 'check-saw-button',
-  CHECK_WILL_SEE_BUTTON: 'check-will-see-button',
-  DELETE_STORE_BUTTON: 'delete-store-button',
+  CHECK_SAW_BUTTON: 'check-saw',
+  CHECK_WILL_SEE_BUTTON: 'check-will-see',
+  DELETE_STORE_BUTTON: 'delete-store',
   SAW_BUTTON: 'saw-button',
   NAV_BUTTON_CLICKED: 'nav__button-clicked',
   VIDEO_ITEM_BUTTON: 'video-item-button'
@@ -1248,7 +1248,7 @@ var VideoItemView = /*#__PURE__*/function () {
   }, {
     key: "renderWillSeeVideoItemTemplate",
     value: function renderWillSeeVideoItemTemplate(parseData) {
-      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div class=\"video-item-button-container\">\n      <button class=\"check-saw-button video-item-button\">\u2705</button>\n      <button class=\"delete-store-button video-item-button\">\uD83D\uDDD1</button>\n    </div>\n    ");
+      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div class=\"video-item-button-container\">\n      <button id=\"check-saw\" class=\"check-saw-button video-item-button\">\u2705</button>\n      <button id-\"delete-store\" class=\"delete-store-button video-item-button\">\uD83D\uDDD1</button>\n    </div>\n    ");
       this.$element.setAttribute('data-videoid', parseData.videoId);
       this.$element.textContent = '';
       this.$element.insertAdjacentHTML('afterbegin', template);
@@ -1256,7 +1256,7 @@ var VideoItemView = /*#__PURE__*/function () {
   }, {
     key: "renderSawVideoItemTemplate",
     value: function renderSawVideoItemTemplate(parseData) {
-      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div class=\"video-item-button-container\">\n      <button class=\"check-will-see-button video-item-button\">\u2705</button>\n      <button class=\"delete-store-button video-item-button\">\uD83D\uDDD1</button>\n    </div>\n    ");
+      var template = "\n    ".concat(this.getMainTemplate(parseData), "\n    <div class=\"video-item-button-container\">\n      <button id=\"check-will-see\" class=\"check-will-see-button video-item-button\">\u2705</button>\n      <button id-\"delete-store\" class=\"delete-store-button video-item-button\">\uD83D\uDDD1</button>\n    </div>\n    ");
       this.$element.setAttribute('data-videoid', parseData.videoId);
       this.$element.textContent = '';
       this.$element.insertAdjacentHTML('afterbegin', template);
