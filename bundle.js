@@ -12,9 +12,9 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
-/***/ "./src/js/api/APIUtil.js":
+/***/ "./src/js/api/ApiUtil.js":
 /*!*******************************!*\
-  !*** ./src/js/api/APIUtil.js ***!
+  !*** ./src/js/api/ApiUtil.js ***!
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -30,7 +30,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var APIUtil = {
+var ApiUtil = {
   fetchData: function fetchData(requestURL) {
     return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
       var response, responseData;
@@ -79,14 +79,14 @@ var APIUtil = {
     }).join('&');
   }
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (APIUtil);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ApiUtil);
 
 /***/ }),
 
-/***/ "./src/js/api/searchVideoAPICaller.js":
-/*!********************************************!*\
-  !*** ./src/js/api/searchVideoAPICaller.js ***!
-  \********************************************/
+/***/ "./src/js/api/videoApiCaller.js":
+/*!**************************************!*\
+  !*** ./src/js/api/videoApiCaller.js ***!
+  \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -98,14 +98,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
-/* harmony import */ var _APIUtil_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./APIUtil.js */ "./src/js/api/APIUtil.js");
+/* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/validator.js */ "./src/js/utils/validator.js");
+/* harmony import */ var _ApiUtil_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ApiUtil.js */ "./src/js/api/ApiUtil.js");
 
 
 
 
-var searchVideoAPICaller = {
-  endPoint: 'https://vigorous-boyd-74648a.netlify.app/youtube/v3/search',
-  queryItems: {
+
+var videoApiCaller = {
+  endPoint: 'https://vigorous-boyd-74648a.netlify.app/youtube/v3/',
+  implementations: {
+    search: 'search',
+    videos: 'videos'
+  },
+  searchQueryItems: {
     part: 'snippet',
     q: '',
     pageToken: '',
@@ -113,7 +119,13 @@ var searchVideoAPICaller = {
     type: 'video',
     regionCode: 'KR'
   },
-  getVideoListData: function getVideoListData(inputValue) {
+  storeVideoQueryItems: {
+    part: 'snippet',
+    type: 'video',
+    regionCode: 'KR',
+    id: ''
+  },
+  getSearchVideoListData: function getSearchVideoListData(inputValue) {
     var _this = this;
 
     return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
@@ -123,29 +135,63 @@ var searchVideoAPICaller = {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _this.queryItems.q = inputValue;
-              requestURL = _APIUtil_js__WEBPACK_IMPORTED_MODULE_3__["default"].createQueryString(_this.endPoint, _this.queryItems);
-              _context.next = 5;
-              return _APIUtil_js__WEBPACK_IMPORTED_MODULE_3__["default"].fetchData(requestURL);
+              _this.searchQueryItems.q = inputValue;
+              _utils_validator_js__WEBPACK_IMPORTED_MODULE_3__["default"].checkParamsEmpty(_this.searchQueryItems);
+              requestURL = _ApiUtil_js__WEBPACK_IMPORTED_MODULE_4__["default"].createQueryString(_this.endPoint + _this.implementations.search, _this.searchQueryItems);
+              _context.next = 6;
+              return _ApiUtil_js__WEBPACK_IMPORTED_MODULE_4__["default"].fetchData(requestURL);
 
-            case 5:
+            case 6:
               rawData = _context.sent;
-              return _context.abrupt("return", _this.parsingVideoData(rawData));
+              return _context.abrupt("return", _this.parsingSearchVideoData(rawData));
 
-            case 9:
-              _context.prev = 9;
+            case 10:
+              _context.prev = 10;
               _context.t0 = _context["catch"](0);
               throw _context.t0;
 
-            case 12:
+            case 13:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[0, 10]]);
     }))();
   },
-  parsingVideoData: function parsingVideoData(rawData) {
+  getStoreVideoListData: function getStoreVideoListData(videoIdList) {
+    var _this2 = this;
+
+    return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee2() {
+      var requestURL, rawData;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _this2.storeVideoQueryItems.id = videoIdList.join(',');
+              _utils_validator_js__WEBPACK_IMPORTED_MODULE_3__["default"].checkParamsEmpty(_this2.storeVideoQueryItems);
+              requestURL = _ApiUtil_js__WEBPACK_IMPORTED_MODULE_4__["default"].createQueryString(_this2.endPoint + _this2.implementations.videos, _this2.storeVideoQueryItems);
+              _context2.next = 6;
+              return _ApiUtil_js__WEBPACK_IMPORTED_MODULE_4__["default"].fetchData(requestURL);
+
+            case 6:
+              rawData = _context2.sent;
+              return _context2.abrupt("return", _this2.parsingStoreVideoData(rawData));
+
+            case 10:
+              _context2.prev = 10;
+              _context2.t0 = _context2["catch"](0);
+              throw _context2.t0;
+
+            case 13:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 10]]);
+    }))();
+  },
+  parsingSearchVideoData: function parsingSearchVideoData(rawData) {
     try {
       var isLastPage = this.checkLastPage(rawData);
       return rawData.items.map(function (item) {
@@ -163,75 +209,10 @@ var searchVideoAPICaller = {
     }
   },
   checkLastPage: function checkLastPage(responseData) {
-    this.queryItems.pageToken = responseData.nextPageToken || '';
+    this.searchQueryItems.pageToken = responseData.nextPageToken || '';
     return !responseData.nextPageToken;
-  }
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (searchVideoAPICaller);
-
-/***/ }),
-
-/***/ "./src/js/api/storeVideoAPICaller.js":
-/*!*******************************************!*\
-  !*** ./src/js/api/storeVideoAPICaller.js ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _APIUtil_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./APIUtil.js */ "./src/js/api/APIUtil.js");
-/* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
-
-
-
-
-var storeVideoAPICaller = {
-  endPoint: 'https://vigorous-boyd-74648a.netlify.app/youtube/v3/videos',
-  queryItems: {
-    part: 'snippet',
-    type: 'video',
-    regionCode: 'KR',
-    id: ''
   },
-  getVideoListData: function getVideoListData(videoIdList) {
-    var _this = this;
-
-    return (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().mark(function _callee() {
-      var requestURL, rawData;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              _this.queryItems.id = videoIdList.join(',');
-              requestURL = _APIUtil_js__WEBPACK_IMPORTED_MODULE_2__["default"].createQueryString(_this.endPoint, _this.queryItems);
-              _context.next = 5;
-              return _APIUtil_js__WEBPACK_IMPORTED_MODULE_2__["default"].fetchData(requestURL);
-
-            case 5:
-              rawData = _context.sent;
-              return _context.abrupt("return", _this.parsingVideoData(rawData));
-
-            case 9:
-              _context.prev = 9;
-              _context.t0 = _context["catch"](0);
-              throw _context.t0;
-
-            case 12:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[0, 9]]);
-    }))();
-  },
-  parsingVideoData: function parsingVideoData(rawData) {
+  parsingStoreVideoData: function parsingStoreVideoData(rawData) {
     try {
       return rawData.items.map(function (item) {
         return {
@@ -243,11 +224,11 @@ var storeVideoAPICaller = {
         };
       });
     } catch (error) {
-      throw new Error(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.ERROR_MESSAGE.DATA_PROCESSING_ERROR);
+      throw new Error(_utils_constants_js__WEBPACK_IMPORTED_MODULE_2__.ERROR_MESSAGE.DATA_PROCESSING_ERROR);
     }
   }
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (storeVideoAPICaller);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (videoApiCaller);
 
 /***/ }),
 
@@ -299,10 +280,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _view_ModalView_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../view/ModalView.js */ "./src/js/view/ModalView.js");
 /* harmony import */ var _utils_validator_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/validator.js */ "./src/js/utils/validator.js");
 /* harmony import */ var _utils_constants_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/constants.js */ "./src/js/utils/constants.js");
-/* harmony import */ var _api_searchVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../api/searchVideoAPICaller.js */ "./src/js/api/searchVideoAPICaller.js");
-/* harmony import */ var _api_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../api/storeVideoAPICaller.js */ "./src/js/api/storeVideoAPICaller.js");
-/* harmony import */ var _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../storage/videoStore.js */ "./src/js/storage/videoStore.js");
-
+/* harmony import */ var _api_videoApiCaller_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../api/videoApiCaller.js */ "./src/js/api/videoApiCaller.js");
+/* harmony import */ var _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../storage/videoStore.js */ "./src/js/storage/videoStore.js");
 
 
 
@@ -350,7 +329,7 @@ var EventHandler = /*#__PURE__*/function () {
     key: "onStoreButtonClick",
     value: function onStoreButtonClick(videoId) {
       try {
-        _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_10__["default"].storeVideoWithVideoId(videoId);
+        _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_9__["default"].storeVideoWithVideoId(videoId);
       } catch (error) {
         alert(error.message);
       }
@@ -369,7 +348,7 @@ var EventHandler = /*#__PURE__*/function () {
                 this.modalView.resetVideoList();
                 this.modalView.showLoadingVideoItems();
                 _context.next = 6;
-                return _api_searchVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getVideoListData(inputValue);
+                return _api_videoApiCaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getSearchVideoListData(inputValue);
 
               case 6:
                 videoListData = _context.sent;
@@ -410,7 +389,7 @@ var EventHandler = /*#__PURE__*/function () {
                 _context2.prev = 0;
                 this.modalView.showLoadingVideoItems();
                 _context2.next = 4;
-                return _api_searchVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getVideoListData(inputValue);
+                return _api_videoApiCaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getSearchVideoListData(inputValue);
 
               case 4:
                 videoListData = _context2.sent;
@@ -442,7 +421,7 @@ var EventHandler = /*#__PURE__*/function () {
   }, {
     key: "onStoreTypeButtonsClick",
     value: function onStoreTypeButtonsClick(storeType) {
-      var videoList = _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_10__["default"].getVideoListWith(storeType);
+      var videoList = _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListWith(storeType);
 
       if (videoList.length === 0) {
         this.mainView.showEmptyStorage(true);
@@ -479,7 +458,7 @@ var EventHandler = /*#__PURE__*/function () {
               case 5:
                 this.mainView.showSkeletonVideoList(willRequestVideoIdList);
                 _context3.next = 8;
-                return _api_storeVideoAPICaller_js__WEBPACK_IMPORTED_MODULE_9__["default"].getVideoListData(willRequestVideoIdList);
+                return _api_videoApiCaller_js__WEBPACK_IMPORTED_MODULE_8__["default"].getStoreVideoListData(willRequestVideoIdList);
 
               case 8:
                 videoData = _context3.sent;
@@ -501,22 +480,25 @@ var EventHandler = /*#__PURE__*/function () {
     }()
   }, {
     key: "onVideoItemButtonsClick",
-    value: function onVideoItemButtonsClick(buttonId, videoId, storeType) {
+    value: function onVideoItemButtonsClick(_ref) {
+      var buttonId = _ref.buttonId,
+          videoId = _ref.videoId,
+          storeType = _ref.storeType,
+          videoItemElement = _ref.videoItemElement;
+
       switch (buttonId) {
-        case _utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.CHECK_WILL_SEE_BUTTON:
-          _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_10__["default"].changeVideoStoreType(videoId, storeType);
-          break;
-
-        case _utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.CHECK_SAW_BUTTON:
-          _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_10__["default"].changeVideoStoreType(videoId, storeType);
-          break;
-
         case _utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.DOM_STRING.DELETE_STORE_BUTTON:
           if (confirm(_utils_constants_js__WEBPACK_IMPORTED_MODULE_7__.CONFIRM_MESSAGE.DELETE_STORED_VIDEO)) {
-            _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_10__["default"].deleteVideoWithId(videoId);
+            _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_9__["default"].deleteVideoWithId(videoId);
             this.onStoreTypeButtonsClick(this.mainView.getCurrentStoreType());
+            this.mainView.deleteVideoItem(videoItemElement);
           }
 
+          break;
+
+        default:
+          _storage_videoStore_js__WEBPACK_IMPORTED_MODULE_9__["default"].changeVideoStoreType(videoId, storeType);
+          this.mainView.deleteVideoItem(videoItemElement);
       }
     }
   }]);
@@ -709,7 +691,8 @@ var ERROR_MESSAGE = {
   DATA_PROCESSING_ERROR: '데이터 처리 중 오류가 발생했습니다.',
   SEARCH_ERROR: '검색 중 오류가 발생했습니다.',
   OVER_MAX_STORE_LENGTH: '최대 100개까지만 저장 가능합니다.',
-  EMPTY_INPUT: '입력된 글자가 없습니다. 한 글자 이상의 검색어를 입력해주세요.'
+  EMPTY_INPUT: '입력된 글자가 없습니다. 한 글자 이상의 검색어를 입력해주세요.',
+  REQUEST_ERROR: '영상을 요청하는 중 오류가 발생했습니다.'
 };
 var CONFIRM_MESSAGE = {
   DELETE_STORED_VIDEO: '저장된 영상를 삭제하시겠습니까?',
@@ -756,6 +739,11 @@ var validator = {
     if (isOverVideoListMaxLength(videoList)) {
       throw new Error(_constants_js__WEBPACK_IMPORTED_MODULE_0__.ERROR_MESSAGE.OVER_MAX_STORE_LENGTH);
     }
+  },
+  checkParamsEmpty: function checkParamsEmpty(params) {
+    if (isEmptyParams(params)) {
+      throw new Error(_constants_js__WEBPACK_IMPORTED_MODULE_0__.ERROR_MESSAGE.REQUEST_ERROR);
+    }
   }
 };
 
@@ -765,6 +753,10 @@ function isEmptyInput(searchInput) {
 
 function isOverVideoListMaxLength(videoList) {
   return videoList.length >= _constants_js__WEBPACK_IMPORTED_MODULE_0__.STORE.VIDEO_LIST_MAX_LENGTH;
+}
+
+function isEmptyParams(params) {
+  return Object.keys(params).length === 0;
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validator);
@@ -884,9 +876,12 @@ var MainView = /*#__PURE__*/function () {
         return videoList.addEventListener('click', function (event) {
           if ((0,_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(event.target.classList).includes(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.DOM_STRING.VIDEO_ITEM_BUTTON)) {
             var videoId = event.target.closest(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.SELECTOR.VIDEO_ITEM).dataset.videoid;
-            callback(event.target.id, videoId, _this2.currentStoreType);
-
-            _this2.deleteVideoItem(event.target.closest(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.SELECTOR.VIDEO_ITEM));
+            callback({
+              buttonId: event.target.id,
+              videoId: videoId,
+              storeType: _this2.currentStoreType,
+              videoItemElement: event.target.closest(_utils_constants_js__WEBPACK_IMPORTED_MODULE_3__.SELECTOR.VIDEO_ITEM)
+            });
           }
         });
       });
